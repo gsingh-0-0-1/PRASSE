@@ -6,7 +6,7 @@
 
 import numpy as np, random
 import matplotlib.pyplot as plt
-import matplotlib.image as mpimg 
+import matplotlib.image as mpimg
 import cv2
 import os
 import scipy.stats
