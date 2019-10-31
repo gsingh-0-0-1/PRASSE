@@ -17,6 +17,7 @@ import shutil
 import pygame
 import pytesseract
 import sys
+from crop_phase_sub import crop
 
 startdir='images/'
 
@@ -47,6 +48,8 @@ for fname in os.listdir(startdir):
         phasesubband = img[200:380, 350:500]
     if subbandsetting == 'reg':
         phasesubband = img[170:350, 320:470]
+    if subbandsetting == 'auto':
+        phasesubband = crop(img)
 
     xlist = np.zeros(len(phasesubband[0]))
     

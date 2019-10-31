@@ -20,17 +20,16 @@ import sys
 
 startdir = 'images/'
 
-for fname in os.listdir(startdir):
-    if fname[0] == '.' or fname == 'temp.png' or 'single' in fname:
-        continue
-
-    print(fname)
-
-    #get the image open, crop it but with a lot of "legroom" or buffer
-    img = Image.open(startdir+fname)
-    img.resize([780, 582])
-    img.save(startdir+fname)
-    img = cv2.imread(startdir+fname)
+def crop(img):
+#for fname in os.listdir(startdir):
+##    if fname[0] == '.' or fname == 'temp.png' or 'single' in fname:
+##        continue
+##
+##    #get the image open, crop it but with a lot of "legroom" or buffer
+##    img = Image.open(startdir+fname)
+##    img.resize([780, 582])
+##    img.save(startdir+fname)
+##    img = cv2.imread(startdir+fname)
 
     img = img[120:400, 300:600]
 
@@ -52,8 +51,6 @@ for fname in os.listdir(startdir):
             newsum = 765 - s
             ylist[x] += newsum
 
-    plt.plot(ylist)
-    plt.show()
     #extract values to crop image
 
     #first x index
@@ -76,7 +73,7 @@ for fname in os.listdir(startdir):
     #second y index
     ymax = np.amax(ylist)
     yind2 = np.where(ylist == ymax)[0][0]
-    while abs(yind1-yind2) < 75:     
+    while abs(yind1-yind2) < 200:     
         ymax = np.amax(ylist)
         yind2 = np.where(ylist == ymax)[0][0]
         ylist[yind2] = 0
@@ -89,8 +86,6 @@ for fname in os.listdir(startdir):
 
     print(xvals, yvals)
 
-    img = img[yvals[0] : yvals[1], xvals[0] : xvals[1]]
-    
-    plt.imshow(img)
-    plt.show()
-    #plt.imshow(img)
+    img = img[yvals[0]+5 : yvals[1]-5, xvals[0]+5 : xvals[1]-5]
+
+    return img
