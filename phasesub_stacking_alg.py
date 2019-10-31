@@ -29,11 +29,17 @@ for fname in os.listdir(startdir):
     if fname[0] == '.' or fname == 'temp.png' or 'single' in fname:
         continue
     print(fname)
-    #resize image to standard
-    img = Image.open(startdir+fname)
-    img.resize([780, 582])
-    img.save(startdir+fname)
-    img = cv2.imread(startdir+fname)
+
+    try:
+        img = Image.open(startdir+fname)
+        canvas = Image.new('RGBA', img.size, (255,255,255,255)) 
+        canvas.paste(img, mask=img) 
+        canvas.save(startdir+fname, format="PNG")
+        img = cv2.imread(startdir+fname)
+    except ValueError: #for alpha channel errors
+        img = cv2.imread(startdir+fname)
+
+    #img = img[120:410, 300:600]
 
     #gbncc demos setting below
     if subbandsetting == 'demo':
@@ -42,10 +48,8 @@ for fname in os.listdir(startdir):
         phasesubband = img[170:350, 320:470]
     if subbandsetting == 'auto':
         phasesubband = crop(img)
-
+        
     xlist = np.zeros(len(phasesubband[0]))
-    
-
 
     for y in range(len(phasesubband)):
         for x in range(len(phasesubband[y])):
@@ -82,10 +86,10 @@ for fname in os.listdir(startdir):
         shutil.move(startdir+fname, 'not_pulsar/'+fname)
         f.write(fname+": Not a Pulsar\n")
 
-    #plt.plot(xlist)
-    #plt.axhline(y=mean+mult*std, color='red')
-
-    #plt.show()
+##    plt.plot(xlist)
+##    plt.axhline(y=mean+mult*std, color='red')
+##
+##    plt.show()
         
 
     
