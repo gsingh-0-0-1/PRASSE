@@ -12,3 +12,6 @@ python phasesub_stacking_alg.py [demo / reg] thresh (how many SD's above the mea
 The options demo and reg control where the program crops out the phase-subband graph from the FFT plot. Demo works for
 the sample GBNCC dataset provided, and reg tends to work for data from the GBT. Expect an update soon which will allow for
 non-user-dependent line detection and more intelligent automatic cropping.
+
+Oddly enough, GitHub does not allow for empty directories to exist in repos, so just run the setup.py file if you decide to
+Clone or download to repo.
