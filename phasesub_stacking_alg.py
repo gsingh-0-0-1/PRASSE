@@ -21,14 +21,6 @@ from crop_phase_sub import crop
 
 startdir='images/'
 
-#plt.ion()
-#fig = plt.figure()
-
-##pygame.init()
-##screen = pygame.display.set_mode([765, 765])
-##screen.fill([255, 255, 255])
-##pygame.display.flip()
-
 args = sys.argv
 
 subbandsetting = args[1]
@@ -75,12 +67,6 @@ for fname in os.listdir(startdir):
     mult = float(args[2])
     thresh = 1
 
-##    pygame.draw.line(screen, [255, 0, 0], [0, mean+std*mult], [500, mean+std*mult])
-
-##    for point in range(len(xlist)):
-##        loc = [int(point), int(xlist[point])]
-##        pygame.draw.circle(screen, [0, 0, 0], loc, 5)
-
     sigpoints = 0 #need *thresh* points above mult * std to call it a pulsar, accounting for regularities between phases
 
     for point in xlist:
@@ -96,17 +82,10 @@ for fname in os.listdir(startdir):
         shutil.move(startdir+fname, 'not_pulsar/'+fname)
         f.write(fname+": Not a Pulsar\n")
 
-    plt.plot(xlist)
-    plt.axhline(y=mean+mult*std, color='red')
-#fig.canvas.draw()
-    plt.show()
-#plt.cla()
-    
+    #plt.plot(xlist)
+    #plt.axhline(y=mean+mult*std, color='red')
 
-##    cv2.imwrite('p_s/'+fname+'p_s.png', phasesubband)
-##
-##    pygame.display.flip()
-##    screen.fill([255, 255, 255])
+    #plt.show()
         
 
     
