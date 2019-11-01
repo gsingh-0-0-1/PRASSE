@@ -1,5 +1,5 @@
 #* Copyright (C) Gurmehar Singh - All Rights Reserved
-#* Unauthorized copying of this file, via any medium is strictly prohibited
+#* Unauthorized copying or distribution of this file, via any medium is strictly prohibited
 #* Proprietary and confidential
 #* Written by Gurmehar Singh <gurmehar@gmail.com>, October 2019
 #*/
@@ -38,8 +38,6 @@ for fname in os.listdir(startdir):
         img = cv2.imread(startdir+fname)
     except ValueError: #for alpha channel errors
         img = cv2.imread(startdir+fname)
-
-    #img = img[120:410, 300:600]
 
     #gbncc demos setting below
     if subbandsetting == 'demo':
