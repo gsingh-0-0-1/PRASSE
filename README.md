@@ -8,7 +8,17 @@ python phasesub_stacking_alg.py [crop option] spike_thresh noise_thresh y_relati
 For simplicity, crop will usually be ‘reg’ (see below for more detail), spike_thresh should be around 2.5/2.6, noise_thresh
 Should be just below - 2.4/2.5, and the last one should almost always be 30.
 
-The options demo and reg control where the program crops out the phase-subband graph from the FFT plot. Demo works for
+spike_thresh:
+This option controls the threshold for finding peaks in the data. The number entered is how many standard deviations above
+The mean a point has to be to be counted as significant.
+
+noise_thresh:
+This is a more complicated option, but it works similarly to spike_thresh.
+
+y_relative_mean_distance
+This is even more complicated, but keep it at 30. Look through the code to see what exactly it does, if you wish.
+
+The options demo and reg (and auto, but that’s still iffy) control where the program crops out the phase-subband graph from the FFT plot. Demo works for
 the sample GBNCC dataset provided, and reg tends to work for data from the GBT. Expect an update soon which will allow for
 non-user-dependent line detection and more intelligent automatic cropping. I’ll also be adding an option to manually input
 the location of the phase-subband graph for any given set of plots, to avoid errors. Look out for that.

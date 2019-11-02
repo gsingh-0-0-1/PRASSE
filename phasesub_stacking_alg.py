@@ -30,6 +30,8 @@ for fname in os.listdir(startdir):
         continue
     print(fname)
 
+    #Open image, basic initial processing
+    
     try:
         img = Image.open(startdir+fname)
         img.resize([780, 582])
@@ -47,10 +49,12 @@ for fname in os.listdir(startdir):
         phasesubband = img[170:370, 320:470]
     if subbandsetting == 'auto':
         phasesubband = crop(img)
-        
+
+    #set up x and y lists
     xlist = np.zeros(len(phasesubband[0]))
     ylist = np.zeros(len(phasesubband))
 
+    #fill up the lists
     for y in range(len(phasesubband)):
         for x in range(len(phasesubband[y])):
             s = sum(phasesubband[y][x])
@@ -58,31 +62,25 @@ for fname in os.listdir(startdir):
             xlist[x] += newsum
             ylist[y] += newsum
 
-##    xbase = np.min(xlist)
-##
-##    for point in range(len(xlist)):
-##        xlist[point] -= xbase
-##
-##    ybase = np.min(ylist)
-##
-##    for point in range(len(ylist)):
-##        ylist[point] -= ybase
-
+    #find basic values
     xstd = np.std(xlist)
     xmean = np.mean(xlist)
+    xpeak = np.amax(xlist)
 
+    #parse input
     xmult = float(args[2])
     ymult = float(args[3])
     thresh = 1
 
-    xpeak = np.amax(xlist)
 
     sigpoints = 0 #need *thresh* points above mult * std to call it a pulsar, accounting for regularities between phases
 
+    #add to sig points based on x points peaks
     for point in xlist:
         if point > xmean + xmult*xstd:
             sigpoints += 1
 
+    #start y list analysis
     y_measures = []
     y_rel = int(args[4])
     for ind in range(len(ylist)):
