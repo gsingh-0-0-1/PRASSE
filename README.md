@@ -1,13 +1,12 @@
 # PulsarPlotAnalysis
 
 The purpose of this program - and eventually, set of programs - is to take FFT plots and sort through them automatically
-without relying on humans. 
+without relying on humans. To run the main script within the working directory, do:
 
-As of now, there is one main script - phasesub_stacking_alg.py. This looks through the phase-subband graph row by row, and
-treats each of those rows as an individual image. It then stacks those "images" and based on a user-determined threshold,
-checks if there are peaks above said threshold. To run the program within the working directory, do:
+python phasesub_stacking_alg.py [crop option] spike_thresh noise_thresh y_relative_mean_distance
 
-python phasesub_stacking_alg.py [crop option] thresh (how many SD's above the mean)
+For simplicity, crop will usually be ‘reg’ (see below for more detail), spike_thresh should be around 2.5/2.6, noise_thresh
+Should be just below - 2.4/2.5, and the last one should almost always be 30.
 
 The options demo and reg control where the program crops out the phase-subband graph from the FFT plot. Demo works for
 the sample GBNCC dataset provided, and reg tends to work for data from the GBT. Expect an update soon which will allow for
