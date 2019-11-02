@@ -7,6 +7,7 @@
 import numpy as np, random
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
+from mpl_toolkits.mplot3d import axes3d, Axes3D
 import cv2
 import os
 import scipy.stats
@@ -49,7 +50,8 @@ def crop(img):
         for x in range(len(img[0])):
             s = sum(img[y][x])
             newsum = 765 - s
-            ylist[y] += newsum         
+            ylist[y] += newsum
+    
 
     #extract values to crop image
 
@@ -72,8 +74,8 @@ def crop(img):
     yind2 = np.where(ylist == ymax)[0][0]
 
     xcheck = 0
-    while abs(xind1 - xind2) < 100:
-        if xcheck >= 10:
+    while abs(xind1 - xind2) < 150 or abs(xind1 - xind2) > 180:
+        if xcheck >= 1000:
             break
         xlist[xind2] = 0
         xmax = np.amax(xlist)
@@ -81,8 +83,8 @@ def crop(img):
         xcheck += 1
 
     ycheck = 0
-    while abs(yind1 - yind2) < 180:
-        if ycheck >= 10:
+    while abs(yind1 - yind2) < 200 or abs(yind1 - yind2) > 230:
+        if ycheck >= 1000:
             break
         ylist[yind2] = 0
         ymax = np.amax(ylist)
@@ -93,7 +95,7 @@ def crop(img):
     yvals = [yind1, yind2]
     xvals.sort()
     yvals.sort()
-
+    
     img = img[yvals[0]+3 : yvals[1]-3, xvals[0]+3 : xvals[1]-3]
 
     return img
