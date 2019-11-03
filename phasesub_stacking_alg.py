@@ -19,15 +19,18 @@ import pytesseract
 import sys
 from crop_phase_sub import crop
 
-startdir='images/'
+startdir='knownpulsars/'
 
 args = sys.argv
 
 subbandsetting = args[1]
 xmult = float(args[2])
-ymult = float(args[3])
-y_rel = int(args[4])
-gui = args[5]
+x_rel = int(args[3])
+ymult = float(args[4])
+y_rel = int(args[5])
+override = float(args[6])
+gui = args[7]
+thresh = 1
 
 for fname in os.listdir(startdir):
     if fname[0] == '.' or fname == 'temp.png' or 'single' in fname:
@@ -71,27 +74,43 @@ for fname in os.listdir(startdir):
     xmean = np.mean(xlist)
     xpeak = np.amax(xlist)
 
-    #parse input
-    thresh = 1
-
 
     sigpoints = 0 #need *thresh* points above mult * std to call it a pulsar, accounting for regularities between phases
 
+    overall_xmean = np.mean(xlist)
+    overall_xstd = np.std(xlist)
+    
     #add to sig points based on x points peaks
-    for point in xlist:
+    x_measures = []
+    for ind in range(len(xlist)):
+        point = xlist[ind]
+
+        bottom = ind-x_rel
+        top = ind+x_rel
+
+        while bottom < 0:
+            bottom += 1
+        while top > len(xlist):
+            top -= 1
+
+        tlist = xlist[bottom:top]
+
+        xstd = np.std(tlist)
+        xmean = np.median(tlist)
+
+        x_measures += [xmean+xstd*xmult]
+        
         if point > xmean + xmult*xstd:
             sigpoints += 1
 
     #start y list analysis
     y_measures = []
-    for ind in range(len(ylist)):
-        #the y-list broadband detector uses mean and standard deviations in the relative area
-        #of the point rather than of the entire list, to detect horizontal lines and also account
-        #for whitewashed areas of the phase subband plot                
+    for ind in range(len(ylist)):              
         point = ylist[ind]
         
         bottom = ind-y_rel
         top = ind+y_rel
+        
         while bottom < 0:
             bottom += 1
         while top > len(ylist): #not subracting 1 here since indexing excludes the finish
@@ -100,7 +119,7 @@ for fname in os.listdir(startdir):
         tlist = ylist[bottom:top]
         
         ystd = np.std(tlist)
-        ymean = np.median(tlist)
+        ymean = np.mean(tlist)
         
         y_measures += [ymean+ystd*ymult]
         
@@ -109,9 +128,7 @@ for fname in os.listdir(startdir):
 
     f = open('stats.txt', 'a+')
 
-    override = 4
-
-    if sigpoints >= thresh or xpeak >= xmean+override*xstd: #if the spike is *really* large, then count it a pulsar anyway
+    if sigpoints >= thresh or xpeak >= overall_xmean+override*overall_xstd: #if the spike is *really* large, then count it a pulsar anyway
         shutil.move(startdir+fname, 'pulsar/'+fname)
         f.write(fname+": Pulsar\n")
     else:
@@ -121,14 +138,19 @@ for fname in os.listdir(startdir):
     ##print(sigpoints)
 
     if gui == 'gui':
-        plt.subplot(2, 1, 1)
+        plt.subplot(2, 2, 1)
         plt.plot(y_measures, 'red')
         plt.plot(ylist, 'blue')
 
-        plt.subplot(2, 1, 2)
-        plt.plot(xlist)
-        plt.axhline(y=xmean+xmult*xstd, color='red')
-        plt.axhline(y=xmean+4*xstd, color='red')
+        plt.subplot(2, 2, 2)
+        plt.plot(xlist, 'blue')
+        plt.plot(x_measures, 'red')
+        plt.axhline(y=overall_xmean+override*overall_xstd, color='red')
+
+        plt.subplot(2, 2, 3)
+        plt.axhline(y=0)
+        plt.axhline(y=len(xlist)*765)
+        plt.plot(xlist, 'blue')
     ##plt.imshow(phasesubband)
 
     plt.show()
