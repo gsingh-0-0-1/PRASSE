@@ -30,8 +30,9 @@ url2 = "http://psrsearch.wvu.edu/psc/"
 
 user.get(url)
 
+username = input("Enter username: ")
 password = getpass.getpass()
-payload = {"username": "gurmehar", "password": password, "submit": "Sign in"}
+payload = {"username": username, "password": password, "submit": "Sign in"}
 
 resp = user.post(url, data=payload)
 
