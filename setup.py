@@ -5,9 +5,20 @@
 #*/
 
 '''This script will make any directories needed to get the main.py file
-up and running'''
+up and running, as well as install necessary libraries.'''
 
-import os
+import os, subprocess, sys
+
+def install(package):
+    subprocess.call([sys.executable, "-m", "pip", "install", package])
+
+install('numpy')
+install('matplotlib')
+install('opencv-python')
+install('scipy')
+install('Pillow')
+install('pygame')
+install('pytesseract')
 
 contents = os.listdir()
 
