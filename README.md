@@ -31,7 +31,7 @@ tight.
 
 To get large amounts of data to test this on, either contact me or use the included getplots.py script. Run it like this:
 
-python [start dataset] [end dataset] [directory to download to]
+python getplots.py [start dataset] [end dataset] [directory to download to]
 
 Make sure to run the setup.py file before doing anything else.
 
