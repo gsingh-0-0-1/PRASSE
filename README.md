@@ -8,7 +8,7 @@ python phasesub_stacking_alg.py [crop option] spike_thresh spike_rel_mean_dist n
 I will provide details as to what each option is below, but if you’re simply looking to run this code, this is currently the best
 working option:
 
-python phasesub_stacking_alg.py reg 2.5 35 2.5 42 70000 nogui
+python phasesub_stacking_alg.py reg 2.8 35 2.5 42 50000 nogui
 
 spike_thresh:
 This option controls the threshold for finding peaks in the data. A higher number means that less points will be flagged as 
