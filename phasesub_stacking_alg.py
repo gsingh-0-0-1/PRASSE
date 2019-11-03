@@ -96,7 +96,7 @@ for fname in os.listdir(startdir):
         tlist = xlist[bottom:top]
 
         xstd = np.std(tlist)
-        xmean = np.median(tlist)
+        xmean = np.median(tlist) #X-MEAN IS ACTUALLY THE MEDIAN
 
         x_measures += [xmean+xstd*xmult]
         
