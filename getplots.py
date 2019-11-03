@@ -32,6 +32,7 @@ user.get(url)
 
 username = input("Enter username: ")
 password = getpass.getpass()
+print(username)
 payload = {"username": username, "password": password, "submit": "Sign in"}
 
 resp = user.post(url, data=payload)
