@@ -24,6 +24,10 @@ startdir='images/'
 args = sys.argv
 
 subbandsetting = args[1]
+xmult = float(args[2])
+ymult = float(args[3])
+y_rel = int(args[4])
+gui = args[5]
 
 for fname in os.listdir(startdir):
     if fname[0] == '.' or fname == 'temp.png' or 'single' in fname:
@@ -68,8 +72,6 @@ for fname in os.listdir(startdir):
     xpeak = np.amax(xlist)
 
     #parse input
-    xmult = float(args[2])
-    ymult = float(args[3])
     thresh = 1
 
 
@@ -82,7 +84,6 @@ for fname in os.listdir(startdir):
 
     #start y list analysis
     y_measures = []
-    y_rel = int(args[4])
     for ind in range(len(ylist)):
         #the y-list broadband detector uses mean and standard deviations in the relative area
         #of the point rather than of the entire list, to detect horizontal lines and also account
@@ -119,14 +120,15 @@ for fname in os.listdir(startdir):
 
     ##print(sigpoints)
 
-    plt.subplot(2, 1, 1)
-    plt.plot(y_measures, 'red')
-    plt.plot(ylist, 'blue')
+    if gui == 'gui':
+        plt.subplot(2, 1, 1)
+        plt.plot(y_measures, 'red')
+        plt.plot(ylist, 'blue')
 
-    plt.subplot(2, 1, 2)
-    plt.plot(xlist)
-    plt.axhline(y=xmean+xmult*xstd, color='red')
-    plt.axhline(y=xmean+4*xstd, color='red')
+        plt.subplot(2, 1, 2)
+        plt.plot(xlist)
+        plt.axhline(y=xmean+xmult*xstd, color='red')
+        plt.axhline(y=xmean+4*xstd, color='red')
     ##plt.imshow(phasesubband)
 
     plt.show()
