@@ -19,7 +19,7 @@ import pytesseract
 import sys
 from crop_phase_sub import crop
 
-startdir='knownpulsars/'
+startdir='images/'
 
 args = sys.argv
 
@@ -102,10 +102,19 @@ for fname in os.listdir(startdir):
         
         if point > xmean + xmult*xstd:
             sigpoints += 1
+##        if point > xmean + 1.5*xmult*xstd:
+##            sigpoints += 1
+##        if point > xmean + 2*xmult*xstd:
+##            sigpoints += 1
 
     #start y list analysis
     y_measures = []
-    for ind in range(len(ylist)):              
+    persist = 1 #to stop a thick line from counting as too many points
+    current_p = 0
+    for ind in range(len(ylist)):
+        if current_p > 0:
+            current_p -= 1
+            continue #make use of the threshold here
         point = ylist[ind]
         
         bottom = ind-y_rel
@@ -125,10 +134,11 @@ for fname in os.listdir(startdir):
         
         if point > ymean + ymult*ystd:
             sigpoints -= 1
+            current_p = persist
 
     f = open('stats.txt', 'a+')
 
-    if sigpoints >= thresh or xpeak >= overall_xmean+override*overall_xstd: #if the spike is *really* large, then count it a pulsar anyway
+    if sigpoints >= thresh or xpeak >= override: #if the spike is *really* large, then count it a pulsar anyway
         shutil.move(startdir+fname, 'pulsar/'+fname)
         f.write(fname+": Pulsar\n")
     else:
@@ -145,13 +155,14 @@ for fname in os.listdir(startdir):
         plt.subplot(2, 2, 2)
         plt.plot(xlist, 'blue')
         plt.plot(x_measures, 'red')
-        plt.axhline(y=overall_xmean+override*overall_xstd, color='red')
+        plt.axhline(y=override, color='red')
 
         plt.subplot(2, 2, 3)
         plt.axhline(y=0)
         plt.axhline(y=len(xlist)*765)
         plt.plot(xlist, 'blue')
-    ##plt.imshow(phasesubband)
+
+        ##plt.imshow(phasesubband)
 
     plt.show()
         

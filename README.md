@@ -3,20 +3,30 @@
 The purpose of this program - and eventually, set of programs - is to take FFT plots and sort through them automatically
 without relying on humans. To run the main script within the working directory, do:
 
-python phasesub_stacking_alg.py [crop option] spike_thresh noise_thresh y_relative_mean_distance nogui
+python phasesub_stacking_alg.py [crop option] spike_thresh spike_rel_mean_dist noise_thresh noise_rel_mean_distance override nogui
 
-For simplicity, crop will usually be ‘reg’ (see below for more detail), spike_thresh should be around 2.5/2.6, noise_thresh
-Should be just below - 2.4/2.5, and the last one should almost always be 30.
+I will provide details as to what each option is below, but if you’re simply looking to run this code, this is currently the best
+working option:
+
+python phasesub_stacking_alg.py reg 2.5 35 2.5 42 70000 nogui
 
 spike_thresh:
-This option controls the threshold for finding peaks in the data. The number entered is how many standard deviations above
-The mean a point has to be to be counted as significant.
+This option controls the threshold for finding peaks in the data. A higher number means that less points will be flagged as 
+a spike or a pulse.
+
+spike_rel_median_dist
+This controls how spike_thresh is applied. A larger number tends to stabilize this set of values to a straight line.
 
 noise_thresh:
-This is a more complicated option, but it works similarly to spike_thresh.
+This is the threshold for something to be considered a horizontal line, and flagged as a noise point. A higher number means that
+less points will be flagged as noise.
 
-y_relative_mean_distance
-This is even more complicated, but keep it at 30. Look through the code to see what exactly it does, if you wish.
+noise_rel_mean_distance
+This serves the same purpose for noise_thresh as the spike_rel_mean_dist serves for spike_thresh
+
+override
+This number is sort of a “veto” - if there are any points detected above this threshold, the plot will instantly be dumped into the
+pulsar folder. It’s not reliant on any values obtained from the image, which makes it a useful tool.
 
 The options demo and reg (and auto, but that’s still iffy) control where the program crops out the phase-subband graph from the FFT plot. 
 For most data, use reg - it works for data from the GBT, at least the data provided on the PSC database. I’ll also be adding an option to 
