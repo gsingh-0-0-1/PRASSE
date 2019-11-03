@@ -3,7 +3,7 @@
 The purpose of this program - and eventually, set of programs - is to take FFT plots and sort through them automatically
 without relying on humans. To run the main script within the working directory, do:
 
-python phasesub_stacking_alg.py [crop option] spike_thresh noise_thresh y_relative_mean_distance
+python phasesub_stacking_alg.py [crop option] spike_thresh noise_thresh y_relative_mean_distance nogui
 
 For simplicity, crop will usually be ‘reg’ (see below for more detail), spike_thresh should be around 2.5/2.6, noise_thresh
 Should be just below - 2.4/2.5, and the last one should almost always be 30.
