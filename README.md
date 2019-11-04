@@ -39,9 +39,13 @@ pulsars are caught, or increase the threshold, decreasing the data you see but i
 On the bright side, I do believe this is a problem easily fixed, and this will likely be covered in the next release. Sit
 tight.
 
-To get large amounts of data to test this on, either contact me or use the included getplots.py script. Run it like this:
+To get large amounts of data to test this on, either contact me, use the included getplots.py script. Run it like this:
 
 python getplots.py [start dataset] [number of datasets] [directory to download to]
+
+Here’s the Google Drive link where you’ll find test data sets:
+
+https://drive.google.com/drive/folders/1BnETBvG0_tpMDdgcnqM13bYoUaiKwxf9?usp=sharing
 
 Make sure to run the setup.py file before doing anything else.
 
