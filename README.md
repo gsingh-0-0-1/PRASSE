@@ -51,3 +51,5 @@ Make sure to run the setup.py file before doing anything else.
 
 And remember, this is still in production, so there may be glitches and misclassifications! Contact me if you have a suggestion
 I didn’t include here or a bug I missed.
+
+Thanks to Martin Nikolov (marvic2409) for helping troubleshoot the software and providing extra data.
