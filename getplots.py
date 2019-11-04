@@ -47,7 +47,7 @@ for i in range(arglist[2]):
     dataset = resp1[resp1.index("preview.php?datasetID"):resp1.index('''>View''')]
     resp1 = resp1.replace(dataset+">View", '')
     print(dataset)
-    datasetsum = dataset.split('=')[1]
+    datasetnum = dataset.split('=')[1]
     dataset = user.get(url2+dataset)
     dataset = dataset.content
     dataset = str(dataset)
@@ -68,5 +68,6 @@ for i in range(arglist[2]):
         plot1 = user.get('http://psrsearch.wvu.edu/psc/results/'+plot)
         im = Image.open(io.BytesIO(plot1.content))
         plot = plot.replace("/", "@")
-        plot = plot + 'datasetID=' + datasetnum
+        plot = plot.replace("png", "")
+        plot = plot + 'datasetID=' + datasetnum + '.png'
         im.save(savedir+plot)

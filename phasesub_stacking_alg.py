@@ -145,7 +145,7 @@ for fname in os.listdir(startdir):
         shutil.move(startdir+fname, 'not_pulsar/'+fname)
         f.write(fname+": Not a Pulsar\n")
 
-    ##print(sigpoints)
+    print(sigpoints)
 
     if gui == 'gui':
         plt.subplot(2, 2, 1)
