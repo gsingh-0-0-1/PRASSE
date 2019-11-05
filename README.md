@@ -3,12 +3,12 @@
 The purpose of this program - and eventually, set of programs - is to take FFT plots and sort through them automatically
 without relying on humans. To run the main script within the working directory, do:
 
-python phasesub_stacking_alg.py [crop option] spike_thresh spike_rel_mean_dist noise_thresh noise_rel_mean_distance override nogui
+python phasesub_stacking_alg.py [crop option] spike_thresh spike_rel_mean_dist noise_thresh noise_rel_mean_distance override obj_min nogui
 
 I will provide details as to what each option is below, but if you’re simply looking to run this code, this is currently the best
 working option:
 
-python phasesub_stacking_alg.py reg 2.8 35 2.5 42 50000 nogui
+python phasesub_stacking_alg.py reg 2.8 20 2.5 42 40000 10000 nogui
 
 spike_thresh:
 This option controls the threshold for finding peaks in the data. A higher number means that less points will be flagged as 
@@ -24,9 +24,12 @@ less points will be flagged as noise.
 noise_rel_mean_distance
 This serves the same purpose for noise_thresh as the spike_rel_mean_dist serves for spike_thresh
 
-override
+override:
 This number is sort of a “veto” - if there are any points detected above this threshold, the plot will instantly be dumped into the
 pulsar folder. It’s not reliant on any values obtained from the image, which makes it a useful tool.
+
+obj_min:
+This works as the opposite of the override parameter.
 
 The options demo and reg (and auto, but that’s still iffy) control where the program crops out the phase-subband graph from the FFT plot. 
 For most data, use reg - it works for data from the GBT, at least the data provided on the PSC database. I’ll also be adding an option to 

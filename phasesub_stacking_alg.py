@@ -29,7 +29,8 @@ x_rel = int(args[3])
 ymult = float(args[4])
 y_rel = int(args[5])
 override = float(args[6])
-gui = args[7]
+obj_min = float(args[7])
+gui = args[8]
 thresh = 1
 
 for fname in os.listdir(startdir):
@@ -73,6 +74,7 @@ for fname in os.listdir(startdir):
     xstd = np.std(xlist)
     xmean = np.mean(xlist)
     xpeak = np.amax(xlist)
+    xmin = np.amin(xlist)
 
 
     sigpoints = 0 #need *thresh* points above mult * std to call it a pulsar, accounting for regularities between phases
@@ -138,7 +140,8 @@ for fname in os.listdir(startdir):
 
     f = open('stats.txt', 'a+')
 
-    if sigpoints >= thresh or xpeak >= override: #if the spike is *really* large, then count it a pulsar anyway
+    
+    if (sigpoints >= thresh and xmin > obj_min) or xpeak >= override:
         shutil.move(startdir+fname, 'pulsar/'+fname)
         f.write(fname+": Pulsar\n")
     else:
@@ -156,7 +159,8 @@ for fname in os.listdir(startdir):
         plt.plot(xlist, 'blue')
         plt.plot(x_measures, 'red')
         plt.axhline(y=override, color='red')
-
+        plt.axhline(y=obj_min, color='red')
+        
         plt.subplot(2, 2, 3)
         plt.axhline(y=0)
         plt.axhline(y=len(xlist)*765)
