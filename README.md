@@ -6,9 +6,18 @@ without relying on humans. To run the main script within the working directory, 
 python phasesub_stacking_alg.py [crop option] spike_thresh spike_rel_mean_dist noise_thresh noise_rel_mean_distance override obj_min nogui
 
 I will provide details as to what each option is below, but if you’re simply looking to run this code, this is currently the best
-working option:
+working option for data from the GBT:
 
 python phasesub_stacking_alg.py reg 2.8 20 2.5 42 40000 10000 nogui
+
+For other data, use:
+
+python phasesub_stacking_alg.py inp 2.8 20 2.5 42 40000 10000 nogui
+
+crop option:
+This option controls how the program crops out the phase-subband graphs. Use “reg” for data from the GBT, and “inp” for other data. If you
+use this option, make sure to first check the coordinates in the image of the phase-subband graphs - do this after resizing the image to
+780 by 582.
 
 spike_thresh:
 This option controls the threshold for finding peaks in the data. A higher number means that less points will be flagged as 

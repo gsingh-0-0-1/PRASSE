@@ -17,7 +17,7 @@ import shutil
 import pygame
 import pytesseract
 import sys
-from crop_phase_sub import crop
+#from crop_phase_sub import crop
 
 startdir='images/'
 
@@ -55,8 +55,12 @@ for fname in os.listdir(startdir):
         phasesubband = img[200:380, 350:500]
     if subbandsetting == 'reg':
         phasesubband = img[170:370, 320:470]
-    if subbandsetting == 'auto':
-        phasesubband = crop(img)
+    if subbandsetting == 'inp':
+        x1 = int(input("Enter first x-value: "))
+        x2 = int(input("Enter second x-value: "))
+        y1 = int(input("Enter first y-value: "))
+        y2 = int(input("Enter second y-value: "))
+        phasesubband = img[y1:y2, x1:x2]
 
     #set up x and y lists
     xlist = np.zeros(len(phasesubband[0]))
