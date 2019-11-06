@@ -19,7 +19,7 @@ import pygame
 import pytesseract
 import sys
 
-startdir = 'images/'
+startdir = 'knownpulsars/'
 
 def crop(img):
 #for fname in os.listdir(startdir):
@@ -32,7 +32,11 @@ def crop(img):
 ##    img.save(startdir+fname)
 ##    img = cv2.imread(startdir+fname)
 
+    orig = img
+
     img = img[120:400, 300:600]
+
+    new = img
 
     xlist = np.zeros(len(img[0]))
 
@@ -54,6 +58,8 @@ def crop(img):
     
 
     #extract values to crop image
+    o_xlist = xlist
+    o_ylist = np.copy(ylist)
 
     #first x index
     xmax = np.amax(xlist)
@@ -98,4 +104,37 @@ def crop(img):
     
     img = img[yvals[0]+3 : yvals[1]-3, xvals[0]+3 : xvals[1]-3]
 
+    plt.subplot(3, 2, 1)
+    plt.imshow(orig)
+
+    plt.subplot(3, 2, 2)
+    plt.imshow(new)
+
+    plt.subplot(3, 2, 3)
+    plt.imshow(img)
+
+    plt.subplot(3, 2, 4)
+    plt.plot(o_xlist, color='red')
+
+    plt.subplot(3, 2, 5)
+    plt.plot(o_ylist, color='blue')
+    
+
+    plt.show()
+
     return img
+
+
+for fname in os.listdir(startdir):
+    if fname[0] == '.' or fname == 'temp.png' or 'single' in fname:
+        continue
+
+    print(fname)
+
+    #get the image open, crop it but with a lot of "legroom" or buffer
+    img = Image.open(startdir+fname)
+    img.resize([780, 582])
+    img.save(startdir+fname)
+    img = cv2.imread(startdir+fname)
+
+    crop(img)
