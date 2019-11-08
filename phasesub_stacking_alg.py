@@ -24,14 +24,49 @@ startdir='images/'
 args = sys.argv
 
 subbandsetting = args[1]
-xmult = float(args[2])
-x_rel = int(args[3])
-ymult = float(args[4])
-y_rel = int(args[5])
-override = float(args[6])
-obj_min = float(args[7])
-gui = args[8]
+if args[2] == 'default': #make the default settings internal, easier for UI
+    xmult = 2.8
+    x_rel = 20
+    ymult = 2.5
+    y_rel = 42
+    override = 40000
+    obj_min = 10000
+    gui = args[3]
+else:
+    xmult = float(args[2])
+    x_rel = int(args[3])
+    ymult = float(args[4])
+    y_rel = int(args[5])
+    override = float(args[6])
+    obj_min = float(args[7])
+    gui = args[8]
 thresh = 1
+
+##function definitions
+
+def calclists(phasesubband):
+    #set up x and y lists
+    xlist = np.zeros(len(phasesubband[0]))
+    ylist = np.zeros(len(phasesubband))
+
+    #fill up the lists
+    for y in range(len(phasesubband)):
+        for x in range(len(phasesubband[y])):
+            s = sum(phasesubband[y][x])
+            newsum = 765 - s
+            xlist[x] += newsum
+            ylist[y] += newsum
+
+    return xlist, ylist
+
+def calcvals(xlist):
+    xstd = np.std(xlist)
+    xmean = np.mean(xlist)
+    xpeak = np.amax(xlist)
+    xmin = np.amin(xlist)
+
+    return xstd, xmean, xpeak, xmin
+    
 
 for fname in os.listdir(startdir):
     if fname[0] == '.' or fname == 'temp.png' or 'single' in fname:
@@ -62,29 +97,17 @@ for fname in os.listdir(startdir):
         y2 = int(input("Enter second y-value: "))
         phasesubband = img[y1:y2, x1:x2]
 
-    #set up x and y lists
-    xlist = np.zeros(len(phasesubband[0]))
-    ylist = np.zeros(len(phasesubband))
-
-    #fill up the lists
-    for y in range(len(phasesubband)):
-        for x in range(len(phasesubband[y])):
-            s = sum(phasesubband[y][x])
-            newsum = 765 - s
-            xlist[x] += newsum
-            ylist[y] += newsum
+    xlist, ylist = calclists(phasesubband)
 
     #find basic values
-    xstd = np.std(xlist)
-    xmean = np.mean(xlist)
-    xpeak = np.amax(xlist)
-    xmin = np.amin(xlist)
+##    xstd = np.std(xlist)
+##    xmean = np.mean(xlist)
+##    xpeak = np.amax(xlist)
+##    xmin = np.amin(xlist)
 
+    xstd, xmean, xpeak, xmin = calcvals(xlist)
 
     sigpoints = 0 #need *thresh* points above mult * std to call it a pulsar, accounting for regularities between phases
-
-    overall_xmean = np.mean(xlist)
-    overall_xstd = np.std(xlist)
     
     #add to sig points based on x points peaks
     x_measures = []
@@ -108,10 +131,6 @@ for fname in os.listdir(startdir):
         
         if point > xmean + xmult*xstd:
             sigpoints += 1
-##        if point > xmean + 1.5*xmult*xstd:
-##            sigpoints += 1
-##        if point > xmean + 2*xmult*xstd:
-##            sigpoints += 1
 
     #start y list analysis
     y_measures = []

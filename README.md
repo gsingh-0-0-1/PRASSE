@@ -8,11 +8,11 @@ python phasesub_stacking_alg.py [crop option] spike_thresh spike_rel_mean_dist n
 I will provide details as to what each option is below, but if you’re simply looking to run this code, this is currently the best
 working option for data from the GBT:
 
-python phasesub_stacking_alg.py reg 2.8 20 2.5 42 40000 10000 nogui
+python phasesub_stacking_alg.py reg default nogui
 
 For other data, use:
 
-python phasesub_stacking_alg.py inp 2.8 20 2.5 42 40000 10000 nogui
+python phasesub_stacking_alg.py inp default nogui
 
 crop option:
 This option controls how the program crops out the phase-subband graphs. Use “reg” for data from the GBT, and “inp” for other data. If you
