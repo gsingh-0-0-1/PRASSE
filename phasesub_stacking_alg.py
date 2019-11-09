@@ -17,7 +17,6 @@ import shutil
 import pygame
 import pytesseract
 import sys
-#from crop_phase_sub import crop
 
 startdir='images/'
 
