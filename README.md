@@ -66,3 +66,5 @@ I didn’t include here or a bug I missed.
 
 Huge thanks to Martin Nikolov (marvic2409) for helping troubleshoot the software and providing extra data, as well as programming most of the
 web integration for this software - coming soon.
+
+Credits to Vibha for providing the known pulsars dataset.
