@@ -53,7 +53,7 @@ tight.
 
 To get large amounts of data to test this on, either contact me, use the included getplots.py script. Run it like this:
 
-python getplots.py [start dataset] [number of datasets] [directory to download to]
+python getplots.py [start dataset] [number of datasets] [directory to download to] [fft/singlepulse]
 
 Here’s the Google Drive link where you’ll find test data sets:
 

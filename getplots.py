@@ -22,6 +22,7 @@ arglist = sys.argv
 arglist[1] = int(arglist[1]) #where to start
 arglist[2] = int(arglist[2]) #iterations
 savedir = arglist[3]
+plottype = arglist[4]
 
 print('sys.argv is', sys.argv)
 
@@ -51,8 +52,13 @@ for i in range(arglist[2]):
     dataset = user.get(url2+dataset)
     dataset = dataset.content
     dataset = str(dataset)
-    dataset = dataset[0:dataset.index("SinglePulse")]
+    if plottype == 'fft':
+        dataset = dataset[0:dataset.index("SinglePulse")]
+    skip = 0
+    num = 0
     while "display_plot.php?" in dataset:
+        skip += 1
+        num += 1
         index = dataset.index("display_plot.php?")
         plot = dataset[index:index+35]
         plot = plot[0:plot.index(">")]
@@ -60,10 +66,16 @@ for i in range(arglist[2]):
         plot = user.get(url2+plot)
         plot = plot.content
         plot = str(plot)
-        plot = plot[plot.index('''/results'''):plot.index('''class="fft"''')]
+        if plottype == 'singlepulse' and skip > 30:
+            plot = plot[plot.index('''/results'''):plot.index('''class="sp"''')]
+        else:
+            plot = plot[plot.index('''/results'''):plot.index('''class="fft"''')]
         plot = plot[0:plot.index('''"''')]
         plot = plot.replace("/results/", '')
-        print(plot)
+        print(str(num)+" : "+plot)
+        if plottype == 'singlepulse':
+            if skip <= 30:
+                continue
 
         plot1 = user.get('http://psrsearch.wvu.edu/psc/results/'+plot)
         im = Image.open(io.BytesIO(plot1.content))
