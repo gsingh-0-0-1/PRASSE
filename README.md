@@ -30,7 +30,7 @@ For other data, use:
 This will prompt you to enter crop values for the images.
 
 This algorithm does quite well overall - its true positive rate is effectively 100% - it has detected all of the pulsars that have been fed into it.
-It has a rough true positive rate of 9%, based on experimental statistics consisting of roughly 15,000 individual pieces of data. The average runtime
+It has a rough false positive rate of 9%, based on experimental statistics consisting of roughly 15,000 individual pieces of data. The average runtime
 Hovers around 3 plots per second, with an observed peak of 5 and a low of 1. The false positives consist mainly of RFI, due to the program being unable
 to look at DM at the moment - when this is implemented, the false positive rate is expected to drop drastically. This will be in the very near future.
 
@@ -87,6 +87,8 @@ This will prompt you to enter your PSC username and password.
 Alternatively, here’s the Google Drive link where you’ll find test data sets:
 
 https://drive.google.com/drive/folders/1BnETBvG0_tpMDdgcnqM13bYoUaiKwxf9?usp=sharing
+
+Data should go into the “images” folder, and they will be sorted into “pulsar” and “not_pulsar”.
 
 And remember, this is still in production, so there may be glitches and misclassifications! Contact me if you have a suggestion
 I didn’t include here or a bug I missed.
