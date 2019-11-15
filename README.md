@@ -13,7 +13,11 @@ Download and use instructions:
 To get the latest stable code, head to the releases section and download the .zip file - the source code - for the latest
 release. Extract the .zip file and move the folder anywhere you want. From there, open command line and navigate inside the folder.
 
-Make sure to run the setup.py file before doing anything else.
+Make sure to run the setup.py file before doing anything else. Simply do:
+
+```python setup.py```
+
+This will install all the necessary dependencies.
 
 To run the main script within the working directory for data from the GBT, run:
 
