@@ -89,6 +89,8 @@ for fname in os.listdir(startdir):
         phasesubband = img[200:380, 350:500]
     if subbandsetting == 'reg':
         phasesubband = img[170:370, 320:470]
+    if subbandsetting == 'none':
+        phasesubband = img
     if subbandsetting == 'inp':
         x1 = int(input("Enter first x-value: "))
         x2 = int(input("Enter second x-value: "))
