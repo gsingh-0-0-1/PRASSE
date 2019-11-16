@@ -1,3 +1,9 @@
+#* Copyright (C) Gurmehar Singh - All Rights Reserved
+#* Unauthorized copying or distribution of this file, via any medium is strictly prohibited
+#* Proprietary and confidential
+#* Written by Gurmehar Singh <gurmehar@gmail.com>, October 2019
+#*/
+
 import numpy as np
 
 #********#********#********#********#********#********#********#
