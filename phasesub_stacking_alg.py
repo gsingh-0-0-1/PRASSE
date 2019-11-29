@@ -17,6 +17,7 @@ import shutil
 import pygame
 import pytesseract
 import sys
+from dmreader import dmfind
 
 startdir='images/'
 
@@ -24,13 +25,17 @@ args = sys.argv
 
 subbandsetting = args[1]
 if args[2] == 'default': #make the default settings internal, easier for UI
-    xmult = 2.8
+    xmult = 3
     x_rel = 20
     ymult = 2.5
-    y_rel = 42
-    override = 40000
+    y_rel = 35
+    override = 45000
     obj_min = 10000
     gui = args[3]
+    try:
+        do_contr = args[4]
+    except IndexError:
+        do_contr = ''
 else:
     xmult = float(args[2])
     x_rel = int(args[3])
@@ -39,6 +44,10 @@ else:
     override = float(args[6])
     obj_min = float(args[7])
     gui = args[8]
+    try:
+        do_contr = args[9]
+    except IndexError:
+        do_contr = ''
 thresh = 1
 
 ##function definitions
@@ -76,35 +85,63 @@ for fname in os.listdir(startdir):
     
     try:
         img = Image.open(startdir+fname)
-        img.resize([780, 582])
         canvas = Image.new('RGBA', img.size, (255,255,255,255)) 
         canvas.paste(img, mask=img) 
         canvas.save(startdir+fname, format="PNG")
         img = cv2.imread(startdir+fname)
     except ValueError: #for alpha channel errors
         img = cv2.imread(startdir+fname)
+    except OSError:
+        continue
 
     #gbncc demos setting below
     if subbandsetting == 'demo':
-        phasesubband = img[200:380, 350:500]
+        origphasesubband = img[200:380, 350:500]
     if subbandsetting == 'reg':
-        phasesubband = img[170:370, 320:470]
+        origphasesubband = img[170:370, 320:470]
     if subbandsetting == 'none':
-        phasesubband = img
+        origphasesubband = img
     if subbandsetting == 'inp':
         x1 = int(input("Enter first x-value: "))
         x2 = int(input("Enter second x-value: "))
         y1 = int(input("Enter first y-value: "))
         y2 = int(input("Enter second y-value: "))
-        phasesubband = img[y1:y2, x1:x2]
+        origphasesubband = img[y1:y2, x1:x2]
+
+    phasesubband = origphasesubband
+
+    ##########CONTRAST FILTER##########
+    if do_contr == 'contrast':
+        contr_thresh = 1
+        contr_mult = 2
+
+        phasesubband = 255 - origphasesubband   
+
+        second = np.zeros([int(len(phasesubband)/2), int(len(phasesubband[0])/2), 3])
+
+        for y in range(len(phasesubband)):
+            m = np.median(np.sum(phasesubband[y], axis=1))
+            std = np.std(np.sum(phasesubband[y], axis=1))
+            for x in range(len(phasesubband[y])):
+                v = phasesubband[y][x][0] #all RGB arrays consist of 3 equal values due to grayscale nature
+                if sum(phasesubband[y][x]) > m+contr_thresh*std:
+                    if v*contr_mult > 255:
+                        phasesubband[y][x] = [255, 255, 255] #check for overflow
+                    else:
+                        phasesubband[y][x] = [v*contr_mult, v*contr_mult, v*contr_mult]
+                else:
+                    phasesubband[y][x] = [v/contr_mult, v/contr_mult, v/contr_mult]   
+
+        phasesubband = 255 - phasesubband
+
+        nlist = np.sum(np.sum(phasesubband, axis=2), axis=0) / (len(phasesubband)*3)
+        synth_img = np.full([len(phasesubband), len(phasesubband[0])], 255-nlist)
+        cv2.imwrite('test.png', synth_img)
+        synth_img = cv2.imread('test.png')
+        phasesubband = 255 - synth_img
+    ##########END OF CONTRAST FILTER#########
 
     xlist, ylist = calclists(phasesubband)
-
-    #find basic values
-##    xstd = np.std(xlist)
-##    xmean = np.mean(xlist)
-##    xpeak = np.amax(xlist)
-##    xmin = np.amin(xlist)
 
     xstd, xmean, xpeak, xmin = calcvals(xlist)
 
@@ -120,8 +157,10 @@ for fname in os.listdir(startdir):
 
         while bottom < 0:
             bottom += 1
+            top += 1
         while top > len(xlist):
             top -= 1
+            bottom -= 1
 
         tlist = xlist[bottom:top]
 
@@ -133,46 +172,48 @@ for fname in os.listdir(startdir):
         if point > xmean + xmult*xstd:
             sigpoints += 1
 
-    #start y list analysis
-    y_measures = []
-    persist = 1 #to stop a thick line from counting as too many points
-    current_p = 0
-    for ind in range(len(ylist)):
-        if current_p > 0:
-            current_p -= 1
-            continue #make use of the threshold here
-        point = ylist[ind]
-        
-        bottom = ind-y_rel
-        top = ind+y_rel
-        
-        while bottom < 0:
-            bottom += 1
-        while top > len(ylist): #not subracting 1 here since indexing excludes the finish
-            top -= 1
+    if do_contr != 'contrast': #contrast filter removes need for y-noise analysis
+        #start y list analysis
+        y_measures = []
+        persist = 1 #to stop a thick line from counting as too many points
+        current_p = 0
+        for ind in range(len(ylist)):
+            if current_p > 0:
+                current_p -= 1
+                continue #make use of the threshold here
+            point = ylist[ind]
+            
+            bottom = ind-y_rel
+            top = ind+y_rel
+            
+            while bottom < 0:
+                bottom += 1
+            while top > len(ylist): #not subracting 1 here since indexing excludes the finish
+                top -= 1
 
-        tlist = ylist[bottom:top]
-        
-        ystd = np.std(tlist)
-        ymean = np.mean(tlist)
-        
-        y_measures += [ymean+ystd*ymult]
-        
-        if point > ymean + ymult*ystd:
-            sigpoints -= 1
-            current_p = persist
-
-    f = open('stats.txt', 'a+')
+            tlist = ylist[bottom:top]
+            
+            ystd = np.std(tlist)
+            ymean = np.mean(tlist)
+            
+            y_measures += [ymean+ystd*ymult]
+            
+            if point > ymean + ymult*ystd:
+                sigpoints -= 1
+                current_p = persist
 
     
     if (sigpoints >= thresh and xmin > obj_min) or xpeak >= override:
-        shutil.move(startdir+fname, 'pulsar/'+fname)
-        f.write(fname+": Pulsar\n")
+        if subbandsetting == 'reg':
+            dm = dmfind(img)
+            if dm < 3:
+                shutil.move(startdir+fname, 'not_pulsar/'+fname)
+            else:
+                shutil.move(startdir+fname, 'pulsar/'+fname)
+        else:
+            shutil.move(startdir+fname, 'pulsar/'+fname)
     else:
         shutil.move(startdir+fname, 'not_pulsar/'+fname)
-        f.write(fname+": Not a Pulsar\n")
-
-    print(sigpoints)
 
     if gui == 'gui':
         plt.subplot(2, 2, 1)
