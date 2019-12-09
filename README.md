@@ -1,5 +1,8 @@
 # PulsarPlotAnalysis
 
+Written by Gurmehar Singh - gurmehar@gmail.com. Please contact me if you have any questions or would like to contribute!
+This is a work in progress, and more contributors is always better.
+
 The purpose of this program - and eventually, set of programs - is to take FFT plots and sort through them automatically
 without relying on humans. The tests were run on a 2015 MacBook Pro - specs blow:
 
