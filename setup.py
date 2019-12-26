@@ -22,7 +22,7 @@ install('pytesseract')
 
 contents = os.listdir()
 
-dirs_to_make = ['images', 'pulsar', 'not_pulsar']
+dirs_to_make = ['images', 'pulsar', 'not_pulsar', 'rfi']
 
 for d in dirs_to_make:
     if d not in contents:

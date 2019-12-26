@@ -209,7 +209,7 @@ for fname in os.listdir(startdir):
         if subbandsetting == 'reg':
             dm = dmfind(img)
             if dm < 3:
-                shutil.move(startdir+fname, 'not_pulsar/'+fname)
+                shutil.move(startdir+fname, 'rfi/'+fname)
             else:
                 shutil.move(startdir+fname, 'pulsar/'+fname)
         else:
