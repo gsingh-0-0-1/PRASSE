@@ -60,7 +60,7 @@ def passvals(layer1, layer2, transformation): #layer1, layer2, then a list of tr
                 newind += [int( eval( str(idx[ind]) + transformation[ind] ) )]
 
         newind = tuple(newind)
-        if layer1.struc[idx] > layer1.thresh[idx]:
+        if layer1.struc[idx] >= layer1.thresh[idx]:
             layer2.struc[newind] += layer1.struc[idx]
             
         

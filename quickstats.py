@@ -10,13 +10,15 @@ import time
 
 ls = []
 
-plt.ion()
-fig = plt.figure()
-ax = fig.add_subplot(111)
-
 args = sys.argv
 
-bound = float(args[1])
+gui = args[1]
+
+if gui == 'gui':
+
+    plt.ion()
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
 
 while 1:
     pulsars = 0
@@ -41,10 +43,11 @@ while 1:
     val = 100*pulsars/total
     ls += [val]
 
-    ax.clear()
-    ax.plot(ls, color='red')
-##    ax.axhline(y=val+bound)
-##    ax.axhline(y=val-bound)
-    fig.canvas.draw()
-    fig.canvas.flush_events()
+    if gui == 'gui':
+        ax.clear()
+        ax.plot(ls, color='red')
+    ##    ax.axhline(y=val+bound)
+    ##    ax.axhline(y=val-bound)
+        fig.canvas.draw()
+        fig.canvas.flush_events()
     time.sleep(1)

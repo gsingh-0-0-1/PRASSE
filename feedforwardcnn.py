@@ -17,7 +17,8 @@ import shutil
 import pygame
 import pytesseract
 import sys
-from cnnstructure import neuron, layer, passvals
+from cnnstructure import layer, passvals
+from dmreader import dmfind
 
 startdir='images/'
 
@@ -26,8 +27,8 @@ args = sys.argv
 subbandsetting = args[1]
 thresh1 = 0
 thresh2 = 40000
-thresh3 = 40000
-thresh4 = 40000
+thresh3 = thresh2+1
+thresh4 = thresh2
 thresh5 = 0
 thresh6 = 0
 noise = 0
@@ -50,6 +51,8 @@ for fname in os.listdir(startdir):
         img = cv2.imread(startdir+fname)
     except ValueError: #for alpha channel errors
         img = cv2.imread(startdir+fname)
+    except OSError:
+        continue
 
     if subbandsetting == 'reg':
         y1 = 170
@@ -57,8 +60,24 @@ for fname in os.listdir(startdir):
         x1 = 320
         x2 = 470
         origphasesubband = np.copy(img[y1:y2, x1:x2])
+    if subbandsetting == 'demo':
+        origphasesubband = np.copy(img[180:380, 350:500])
     if subbandsetting == 'none':
         origphasesubband = np.copy(img)
+
+##    second = np.sum(origphasesubband, axis=2) #create a copy to determine means from
+##    #necessary because numpy does not allow setting array values with a sequence
+##    
+##    for y in range(len(origphasesubband)):
+##        m = np.mean(second[y])
+####        ma = np.amax(second[y])
+####        mi = np.amin(second[y])
+####        m = (ma+mi)/2
+##        for x in range(len(origphasesubband[y])):
+##            if sum(origphasesubband[y][x]) > m:
+##                origphasesubband[y][x] = [255, 255, 255]
+##            else:
+##                origphasesubband[y][x] = [0, 0, 0]
 
     phasesubband = np.sum(origphasesubband, axis=2)
     phasesubband = 765 - phasesubband
@@ -102,9 +121,29 @@ for fname in os.listdir(startdir):
     passvals(layer4, layer5, ['/5'])
     passvals(layer5, layer6, ['/6'])
 
+    print(len(layer6.struc))
     finalval = layer6.struc[0]
+
+##    plt.subplot(5, 1, 1)
+##    plt.plot(layer2.struc)
+##    plt.subplot(5, 1, 2)
+##    plt.plot(layer3.struc)
+##    plt.subplot(5, 1, 3)
+##    plt.plot(layer4.struc)
+##    plt.subplot(5, 1, 4)
+##    plt.plot(layer5.struc)
+##    plt.subplot(5, 1, 5)
+##    plt.imshow(origphasesubband)
+##    plt.show()
 
     if finalval == 0:
         shutil.move(startdir+fname, 'not_pulsar/'+fname)
     else:
-        shutil.move(startdir+fname, 'pulsar/'+fname)
+        if subbandsetting == 'reg':
+            dm = dmfind(img)
+            if dm < 3:
+                shutil.move(startdir+fname, 'not_pulsar/'+fname)
+            else:
+                shutil.move(startdir+fname, 'pulsar/'+fname)
+        else:
+            shutil.move(startdir+fname, 'pulsar/'+fname)
