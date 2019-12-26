@@ -3,10 +3,11 @@
 Written by Gurmehar Singh - gurmehar@gmail.com. Please contact me if you have any questions or would like to contribute!
 This is a work in progress, and more contributors is always better.
 
-The purpose of this program - and eventually, set of programs - is to take FFT plots and sort through them automatically
+The purpose of this repository is to take FFT plots and sort through them automatically
 without relying on humans. The tests were run on a 2015 MacBook Pro - specs blow:
 
 Processor: 2.7 GHz Intel Core i5
+
 Memory: 8 GB 1867 MHz DDR3 
 
 Keep these in mind when looking at runtime statistics.
@@ -22,7 +23,7 @@ Make sure to run the setup.py file before doing anything else. Simply do:
 
 This will install all the necessary dependencies.
 
-To run the main script within the working directory for data from the GBT, run:
+To run the main script within the working directory for data from the Green Bank Telescope - specifically that provided by the Pulsar Search Collaboratory - run:
 
 ```python phasesub_stacking_alg.py reg default nogui```
 
@@ -30,19 +31,19 @@ For other data, use:
 
 ```python phasesub_stacking_alg.py inp default nogui```
 
-This will prompt you to enter crop values for the images.
+The program will then prompt you to enter
 
-This algorithm does quite well overall - its true positive rate is effectively 100% - it has detected all of the pulsars that have been fed into it.
-It has a rough false positive rate of 9%, based on experimental statistics consisting of roughly 15,000 individual pieces of data. The average runtime
-Hovers around 3 plots per second, with an observed peak of 5 and a low of 1. The false positives consist mainly of RFI, due to the program being unable
-to look at DM at the moment - when this is implemented, the false positive rate is expected to drop drastically. This will be in the very near future.
+This algorithm does quite well overall - its true positive rate is effectively 100% - it has detected all of the pulsars that have been fed into it. For reference,
+355 individual pulsars were put through the program, and all were detected. Given that the current number of known pulsars is around 3,000, this is quite a good
+test set. It has a rough false positive rate of 4.5%, based on experimental statistics consisting of over 25,000 individual pieces of data. However, this statistic
+depends heavily on how much radio frequency interference appears in the data, which can sometimes slip through the filter. This is the main focus of the project right now,
+to ensure that only pulsars make it through the filter. The average runtime hovers around 3 plots per second.
 
-The full command accepts these values:
+If you want to play around with individual values that affect the filter, here is the full command:
 
-```python phasesub_stacking_alg.py [crop option] spike_thresh spike_rel_mean_dist noise_thresh noise_rel_mean_distance override obj_min nogui```
+```python phasesub_stacking_alg.py [crop option] spike_thresh spike_rel_mean_dist noise_thresh noise_rel_mean_distance override obj_min nogui [contrast option]```
 
-I will provide details as to what each option is below, but if you’re simply looking to run this code, see the above descriptions for running
-the script.
+I will provide details as to what each option is below, but if you’re simply looking to use this code to get through a lot of data, ignore the following descriptions.
 
 ```crop option:```
 This option controls how the program crops out the phase-subband graphs. Use “reg” for data from the GBT, and “inp” for other data. If you
@@ -71,15 +72,14 @@ pulsar folder. It’s not reliant on any values obtained from the image, which m
 ```obj_min:```
 This works as the opposite of the override parameter.
 
-The options inp and reg control where the program crops out the phase-subband graph from the FFT plot. 
-For most data, use reg - it works for data from the GBT, at least the data provided on the PSC database. I’ll also be adding an option to 
-manually input the location of the phase-subband graph for any given set of plots, to avoid errors - look out for that.
+For more detailed descriptions, please contact me - it would take a while to explain the entire algorithm here, and I’m not sure I’d be able
+to do a decent job in a written paragraph :).
 
 There is also a test feedforward convolutional network included. This uses the principles of a neural network and convolution to analyze
 images. Currently, it has detected all pulsars fed into it, giving it a true-positive rate of 100%, and from testing, it has a false positive
-rate of around 4.7% - roughly half that of the first algorithm. However, it does work a bit slower than the first algorithm, at around 1 plot a 
-second. This false positive rate is also due to inability to detect RFI. This feature will likely be implemented with this neural network, and the
-false positive rate is expected to drop to around 2%.
+rate of around 4.6% - about the same as the first algorithm. However, it does work a bit slower than the first algorithm, at around 1 plot a 
+second. This will likely go obsolete and be replaced by a model constructed with TensorFlow in the future, as this was mainly an experiment
+I did to test a theory I had.
 
 To get large amounts of data to test this on, either contact me, use the included getplots.py script. Run it like this:
 
@@ -91,7 +91,8 @@ Alternatively, here’s the Google Drive link where you’ll find test data sets
 
 https://drive.google.com/drive/folders/1BnETBvG0_tpMDdgcnqM13bYoUaiKwxf9?usp=sharing
 
-Data should go into the “images” folder, and they will be sorted into “pulsar” and “not_pulsar”.
+Data should go into the “images” folder - put this in the download directory option - and they will be sorted into “pulsar” and “not_pulsar” by the program.
+I will be adding an RFI folder soon.
 
 And remember, this is still in production, so there may be glitches and misclassifications! Contact me if you have a suggestion
 I didn’t include here or a bug I missed.

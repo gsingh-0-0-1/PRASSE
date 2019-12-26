@@ -50,6 +50,12 @@ else:
         do_contr = ''
 thresh = 1
 
+if subbandsetting == 'inp':
+    x1 = int(input("Enter x-value of top left corner: "))
+    y1 = int(input("Enter y-value of top left corner: "))
+    x2 = int(input("Enter x-value of bottom right corner: "))
+    y2 = int(input("Enter y-value of bottom right corner: "))
+
 ##function definitions
 
 def calclists(phasesubband):
@@ -102,10 +108,6 @@ for fname in os.listdir(startdir):
     if subbandsetting == 'none':
         origphasesubband = img
     if subbandsetting == 'inp':
-        x1 = int(input("Enter first x-value: "))
-        x2 = int(input("Enter second x-value: "))
-        y1 = int(input("Enter first y-value: "))
-        y2 = int(input("Enter second y-value: "))
         origphasesubband = img[y1:y2, x1:x2]
 
     phasesubband = origphasesubband
