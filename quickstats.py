@@ -33,7 +33,13 @@ while 1:
             continue
         non += 1
 
-    total = pulsars+non
+    rfi = 0
+    for i in os.listdir('rfi/'):
+        if i[0] == '.':
+            continue
+        rfi += 1
+
+    total = pulsars+non+rfi
 
     print("Pulsars: "+str(pulsars))
     print("Not pulsars: "+str(non))

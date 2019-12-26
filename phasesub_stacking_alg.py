@@ -32,10 +32,6 @@ if args[2] == 'default': #make the default settings internal, easier for UI
     override = 45000
     obj_min = 10000
     gui = args[3]
-    try:
-        do_contr = args[4]
-    except IndexError:
-        do_contr = ''
 else:
     xmult = float(args[2])
     x_rel = int(args[3])
@@ -44,10 +40,6 @@ else:
     override = float(args[6])
     obj_min = float(args[7])
     gui = args[8]
-    try:
-        do_contr = args[9]
-    except IndexError:
-        do_contr = ''
 thresh = 1
 
 if subbandsetting == 'inp':
@@ -104,7 +96,7 @@ for fname in os.listdir(startdir):
     if subbandsetting == 'demo':
         origphasesubband = img[200:380, 350:500]
     if subbandsetting == 'reg':
-        origphasesubband = img[170:370, 320:470]
+        origphasesubband = img[170:355, 320:470] #switch 355 to 370
     if subbandsetting == 'none':
         origphasesubband = img
     if subbandsetting == 'inp':
@@ -112,36 +104,37 @@ for fname in os.listdir(startdir):
 
     phasesubband = origphasesubband
 
-    ##########CONTRAST FILTER##########
-    if do_contr == 'contrast':
-        contr_thresh = 1
-        contr_mult = 2
-
-        phasesubband = 255 - origphasesubband   
-
-        second = np.zeros([int(len(phasesubband)/2), int(len(phasesubband[0])/2), 3])
-
-        for y in range(len(phasesubband)):
-            m = np.median(np.sum(phasesubband[y], axis=1))
-            std = np.std(np.sum(phasesubband[y], axis=1))
-            for x in range(len(phasesubband[y])):
-                v = phasesubband[y][x][0] #all RGB arrays consist of 3 equal values due to grayscale nature
-                if sum(phasesubband[y][x]) > m+contr_thresh*std:
-                    if v*contr_mult > 255:
-                        phasesubband[y][x] = [255, 255, 255] #check for overflow
-                    else:
-                        phasesubband[y][x] = [v*contr_mult, v*contr_mult, v*contr_mult]
-                else:
-                    phasesubband[y][x] = [v/contr_mult, v/contr_mult, v/contr_mult]   
-
-        phasesubband = 255 - phasesubband
-
-        nlist = np.sum(np.sum(phasesubband, axis=2), axis=0) / (len(phasesubband)*3)
-        synth_img = np.full([len(phasesubband), len(phasesubband[0])], 255-nlist)
-        cv2.imwrite('test.png', synth_img)
-        synth_img = cv2.imread('test.png')
-        phasesubband = 255 - synth_img
-    ##########END OF CONTRAST FILTER#########
+    ##This is old code for a contrast filter, will be deleted soon, after further testing.
+##    ##########CONTRAST FILTER##########
+##    if do_contr == 'contrast':
+##        contr_thresh = 1
+##        contr_mult = 2
+##
+##        phasesubband = 255 - origphasesubband   
+##
+##        second = np.zeros([int(len(phasesubband)/2), int(len(phasesubband[0])/2), 3])
+##
+##        for y in range(len(phasesubband)):
+##            m = np.median(np.sum(phasesubband[y], axis=1))
+##            std = np.std(np.sum(phasesubband[y], axis=1))
+##            for x in range(len(phasesubband[y])):
+##                v = phasesubband[y][x][0] #all RGB arrays consist of 3 equal values due to grayscale nature
+##                if sum(phasesubband[y][x]) > m+contr_thresh*std:
+##                    if v*contr_mult > 255:
+##                        phasesubband[y][x] = [255, 255, 255] #check for overflow
+##                    else:
+##                        phasesubband[y][x] = [v*contr_mult, v*contr_mult, v*contr_mult]
+##                else:
+##                    phasesubband[y][x] = [v/contr_mult, v/contr_mult, v/contr_mult]   
+##
+##        phasesubband = 255 - phasesubband
+##
+##        nlist = np.sum(np.sum(phasesubband, axis=2), axis=0) / (len(phasesubband)*3)
+##        synth_img = np.full([len(phasesubband), len(phasesubband[0])], 255-nlist)
+##        cv2.imwrite('test.png', synth_img)
+##        synth_img = cv2.imread('test.png')
+##        phasesubband = 255 - synth_img
+##    ##########END OF CONTRAST FILTER#########
 
     xlist, ylist = calclists(phasesubband)
 
@@ -174,35 +167,34 @@ for fname in os.listdir(startdir):
         if point > xmean + xmult*xstd:
             sigpoints += 1
 
-    if do_contr != 'contrast': #contrast filter removes need for y-noise analysis
-        #start y list analysis
-        y_measures = []
-        persist = 1 #to stop a thick line from counting as too many points
-        current_p = 0
-        for ind in range(len(ylist)):
-            if current_p > 0:
-                current_p -= 1
-                continue #make use of the threshold here
-            point = ylist[ind]
-            
-            bottom = ind-y_rel
-            top = ind+y_rel
-            
-            while bottom < 0:
-                bottom += 1
-            while top > len(ylist): #not subracting 1 here since indexing excludes the finish
-                top -= 1
+    #start y list analysis
+    y_measures = []
+    persist = 1 #to stop a thick line from counting as too many points
+    current_p = 0
+    for ind in range(len(ylist)):
+        if current_p > 0:
+            current_p -= 1
+            continue #make use of the threshold here
+        point = ylist[ind]
+        
+        bottom = ind-y_rel
+        top = ind+y_rel
+        
+        while bottom < 0:
+            bottom += 1
+        while top > len(ylist): #not subracting 1 here since indexing excludes the finish
+            top -= 1
 
-            tlist = ylist[bottom:top]
-            
-            ystd = np.std(tlist)
-            ymean = np.mean(tlist)
-            
-            y_measures += [ymean+ystd*ymult]
-            
-            if point > ymean + ymult*ystd:
-                sigpoints -= 1
-                current_p = persist
+        tlist = ylist[bottom:top]
+        
+        ystd = np.std(tlist)
+        ymean = np.mean(tlist)
+        
+        y_measures += [ymean+ystd*ymult]
+        
+        if point > ymean + ymult*ystd:
+            sigpoints -= 1
+            current_p = persist
 
     
     if (sigpoints >= thresh and xmin > obj_min) or xpeak >= override:
