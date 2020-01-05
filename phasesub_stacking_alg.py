@@ -196,18 +196,21 @@ for fname in os.listdir(startdir):
             sigpoints -= 1
             current_p = persist
 
+    status = ''
     
     if (sigpoints >= thresh and xmin > obj_min) or xpeak >= override:
         if subbandsetting == 'reg':
             dm = dmfind(img)
-            if dm < 3:
-                shutil.move(startdir+fname, 'rfi/'+fname)
+            if dm < 2:
+                status = 'rfi'
             else:
-                shutil.move(startdir+fname, 'pulsar/'+fname)
+                status = 'pulsar'
         else:
-            shutil.move(startdir+fname, 'pulsar/'+fname)
+            status = 'pulsar'
     else:
-        shutil.move(startdir+fname, 'not_pulsar/'+fname)
+        status = 'not_pulsar'
+
+    shutil.move(startdir+fname, status+'/'+fname)
 
     if gui == 'gui':
         plt.subplot(2, 2, 1)
