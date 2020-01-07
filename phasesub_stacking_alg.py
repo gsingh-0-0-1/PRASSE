@@ -82,12 +82,6 @@ for fname in os.listdir(startdir):
     #Open image, basic initial processing
     
     try:
-        img = Image.open(startdir+fname)
-        canvas = Image.new('RGBA', img.size, (255,255,255,255)) 
-        canvas.paste(img, mask=img) 
-        canvas.save(startdir+fname, format="PNG")
-        img = cv2.imread(startdir+fname)
-    except ValueError: #for alpha channel errors
         img = cv2.imread(startdir+fname)
     except OSError:
         continue
@@ -102,7 +96,7 @@ for fname in os.listdir(startdir):
     if subbandsetting == 'inp':
         origphasesubband = img[y1:y2, x1:x2]
 
-    phasesubband = origphasesubband
+    #phasesubband = cv2.GaussianBlur(origphasesubband, (5,5), 1)
 
     ##This is old code for a contrast filter, will be deleted soon, after further testing.
 ##    ##########CONTRAST FILTER##########
@@ -150,12 +144,10 @@ for fname in os.listdir(startdir):
         bottom = ind-x_rel
         top = ind+x_rel
 
-        while bottom < 0:
-            bottom += 1
-            top += 1
-        while top > len(xlist):
-            top -= 1
-            bottom -= 1
+        if bottom < 0:
+            bottom = 0
+        while top >= len(xlist):
+            top = len(xlist) - 1
 
         tlist = xlist[bottom:top]
 
@@ -231,6 +223,7 @@ for fname in os.listdir(startdir):
         ##plt.imshow(phasesubband)
 
     plt.show()
+
         
 
     

@@ -23,6 +23,8 @@ Make sure to run the setup.py file before doing anything else. Simply do:
 
 This will install all the necessary dependencies.
 
+#Version 1.1.0
+
 To run the main script within the working directory for data from the Green Bank Telescope - specifically that provided by the Pulsar Search Collaboratory (PSC) - run:
 
 ```python phasesub_stacking_alg.py reg default nogui```
