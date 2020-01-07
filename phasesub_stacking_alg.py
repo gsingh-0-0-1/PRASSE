@@ -19,7 +19,7 @@ import pytesseract
 import sys
 from dmreader import dmfind
 
-startdir='knownpulsars/'
+startdir='images/'
 
 args = sys.argv
 
