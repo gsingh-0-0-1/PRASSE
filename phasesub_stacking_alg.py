@@ -19,7 +19,7 @@ import pytesseract
 import sys
 from dmreader import dmfind
 
-startdir='images/'
+startdir='knownpulsars/'
 
 args = sys.argv
 
@@ -95,6 +95,8 @@ for fname in os.listdir(startdir):
         origphasesubband = img
     if subbandsetting == 'inp':
         origphasesubband = img[y1:y2, x1:x2]
+
+    phasesubband = origphasesubband
 
     #phasesubband = cv2.GaussianBlur(origphasesubband, (5,5), 1)
 
