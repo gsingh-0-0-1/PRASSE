@@ -82,12 +82,6 @@ This works as the opposite of the override parameter.
 For more detailed descriptions, please contact me - it would take a while to explain the entire algorithm here, and I’m not sure I’d be able
 to do a decent job in a written paragraph :).
 
-There is also a test feedforward convolutional network included. This uses the principles of a neural network and convolution to analyze
-images. Currently, it has detected all pulsars fed into it, giving it a true-positive rate of 100%, and from testing, it has a false positive
-rate of around 4.6% - about the same as the first algorithm. However, it does work a bit slower than the first algorithm, at around 1 plot a 
-second. This will likely go obsolete and be replaced by a model constructed with TensorFlow in the future, as this was mainly an experiment
-I did to test a theory I had.
-
 To get large amounts of data to test this on, either contact me, use the included getplots.py script. Run it like this:
 
 python getplots.py [start dataset] [number of datasets] [directory to download to] [fft/singlepulse]
