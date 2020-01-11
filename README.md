@@ -98,8 +98,7 @@ Alternatively, here’s the Google Drive link where you’ll find test data sets
 
 https://drive.google.com/drive/folders/1BnETBvG0_tpMDdgcnqM13bYoUaiKwxf9?usp=sharing
 
-Data should go into the “images” folder - put this in the download directory option - and they will be sorted into “pulsar” and “not_pulsar” by the program.
-I will be adding an RFI folder soon.
+Data should go into the “images” folder - put this in the download directory option - and they will be sorted into “pulsar” and “not_pulsar” by the program. For the ```reg``` crop option, the program will check DM when it detects a pulsar, and sort that into an RFI folder.
 
 And remember, this is still in production, so there may be glitches and misclassifications! Contact me if you have a suggestion
 I didn’t include here or a bug I missed.
