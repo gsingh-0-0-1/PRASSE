@@ -1,4 +1,4 @@
-# FasPPAn - Fast Pulsar Plot Analysis
+# PRASSE - PulsaR Automated Search Script Ensemble
 
 Written by Gurmehar Singh - gurmehar@gmail.com. Please contact me if you have any questions or would like to contribute!
 This is a work in progress, and more contributors is always better.
