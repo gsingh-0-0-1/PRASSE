@@ -39,9 +39,10 @@ The program will then prompt you to enter
 
 This algorithm does quite well overall - its true positive rate is effectively 100% - it has detected all of the pulsars that have been fed into it. For reference,
 355 individual pulsars were put through the program, and all were detected. Given that the current number of known pulsars is around 3,000, this is quite a good
-test set. It has a rough false positive rate of 4.5%, based on experimental statistics consisting of over 25,000 individual pieces of data. However, this statistic
+test set. It has a rough false positive rate of 2.5%, based on experimental statistics consisting of over 25,000 individual pieces of data. However, this statistic
 depends heavily on how much radio frequency interference appears in the data, which can sometimes slip through the filter. This is the main focus of the project right now,
-to ensure that only pulsars make it through the filter. The average runtime hovers around 3 plots per second.
+to ensure that only pulsars make it through the filter. The average runtime hovers around 10-11 plots per second, depending on how frequently it validates the DM of 
+possible pulsar candidates (if running on the ```reg``` crop option, see below paragraph for details).
 
 Also, the program will only sort RFI for data from the Pulsar Search Collaboratory provided by the Green Bank Telescope. This is due to different data being formatted differently,
 and the location of the DM may be different from plot to plot. Feel free to modify the code to be more flexible and send in a pull request, or contact me with a suggestion.
