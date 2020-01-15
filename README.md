@@ -4,7 +4,7 @@ Written by Gurmehar Singh - gurmehar@gmail.com. Please contact me if you have an
 This is a work in progress, and more contributors is always better.
 
 The purpose of this repository is to take FFT plots and sort through them automatically
-without relying on humans. The tests were run on a 2015 MacBook Pro - specs blow:
+without relying on humans. The tests were run on a 2015 MacBook Pro - see specs blow:
 
 Processor: 2.7 GHz Intel Core i5
 
