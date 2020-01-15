@@ -23,7 +23,7 @@ Make sure to run the setup.py file before doing anything else. Simply do:
 
 This will install all the necessary dependencies.
 
-# Version 1.1.0
+# Version 2.0.0
 
 To run the main script within the working directory for data from the Green Bank Telescope - specifically that provided by the Pulsar Search Collaboratory (PSC) - run:
 
@@ -39,8 +39,8 @@ The program will then prompt you to enter
 
 This algorithm does quite well overall - its true positive rate is effectively 100% - it has detected all of the pulsars that have been fed into it. For reference,
 355 individual pulsars were put through the program, and all were detected. Given that the current number of known pulsars is around 3,000, this is quite a good
-test set. It has a rough false positive rate of 2.5%, based on experimental statistics consisting of over 25,000 individual pieces of data. However, this statistic
-depends heavily on how much radio frequency interference appears in the data, which can sometimes slip through the filter. This is the main focus of the project right now,
+test set. It has a rough false positive rate of 2.5%, based on experimentally derived statistics consisting of tests of nearly 100,000 individual pieces of data. However, this 
+statistic depends heavily on how much radio frequency interference appears in the data, which can sometimes slip through the filter. This is the main focus of the project right now,
 to ensure that only pulsars make it through the filter. The average runtime hovers around 10-11 plots per second, depending on how frequently it validates the DM of 
 possible pulsar candidates (if running on the ```reg``` crop option, see below paragraph for details).
 
