@@ -13,6 +13,8 @@ ls = []
 args = sys.argv
 
 gui = args[1]
+loop = int(args[2])
+
 
 if gui == 'gui':
 
@@ -20,7 +22,7 @@ if gui == 'gui':
     fig = plt.figure()
     ax = fig.add_subplot(111)
 
-while 1:
+for i in range(loop):
     pulsars = 0
     for i in os.listdir('pulsar/'):
         if i[0] == '.':
@@ -57,3 +59,4 @@ while 1:
         fig.canvas.draw()
         fig.canvas.flush_events()
     time.sleep(1)
+

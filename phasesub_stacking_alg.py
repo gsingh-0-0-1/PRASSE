@@ -26,10 +26,10 @@ args = sys.argv
 subbandsetting = args[1]
 if args[2] == 'default': #make the default settings internal, easier for UI
     xmult = 3
-    x_rel = 20
+    x_rel = 10
     ymult = 2.5
     y_rel = 35
-    override = 45000
+    override = 50000
     obj_min = 10000
     gui = args[3]
 else:
@@ -51,17 +51,10 @@ if subbandsetting == 'inp':
 ##function definitions
 
 def calclists(phasesubband):
-    #set up x and y lists
-    xlist = np.zeros(len(phasesubband[0]))
-    ylist = np.zeros(len(phasesubband))
+    phasesubband = np.sum(255-phasesubband, axis=2)
 
-    #fill up the lists
-    for y in range(len(phasesubband)):
-        for x in range(len(phasesubband[y])):
-            s = sum(phasesubband[y][x])
-            newsum = 765 - s
-            xlist[x] += newsum
-            ylist[y] += newsum
+    xlist = np.sum(phasesubband, axis=0)
+    ylist = np.sum(phasesubband, axis=1)
 
     return xlist, ylist
 
@@ -100,37 +93,7 @@ for fname in os.listdir(startdir):
 
     #phasesubband = cv2.GaussianBlur(origphasesubband, (5,5), 1)
 
-    ##This is old code for a contrast filter, will be deleted soon, after further testing.
-##    ##########CONTRAST FILTER##########
-##    if do_contr == 'contrast':
-##        contr_thresh = 1
-##        contr_mult = 2
-##
-##        phasesubband = 255 - origphasesubband   
-##
-##        second = np.zeros([int(len(phasesubband)/2), int(len(phasesubband[0])/2), 3])
-##
-##        for y in range(len(phasesubband)):
-##            m = np.median(np.sum(phasesubband[y], axis=1))
-##            std = np.std(np.sum(phasesubband[y], axis=1))
-##            for x in range(len(phasesubband[y])):
-##                v = phasesubband[y][x][0] #all RGB arrays consist of 3 equal values due to grayscale nature
-##                if sum(phasesubband[y][x]) > m+contr_thresh*std:
-##                    if v*contr_mult > 255:
-##                        phasesubband[y][x] = [255, 255, 255] #check for overflow
-##                    else:
-##                        phasesubband[y][x] = [v*contr_mult, v*contr_mult, v*contr_mult]
-##                else:
-##                    phasesubband[y][x] = [v/contr_mult, v/contr_mult, v/contr_mult]   
-##
-##        phasesubband = 255 - phasesubband
-##
-##        nlist = np.sum(np.sum(phasesubband, axis=2), axis=0) / (len(phasesubband)*3)
-##        synth_img = np.full([len(phasesubband), len(phasesubband[0])], 255-nlist)
-##        cv2.imwrite('test.png', synth_img)
-##        synth_img = cv2.imread('test.png')
-##        phasesubband = 255 - synth_img
-##    ##########END OF CONTRAST FILTER#########
+
 
     xlist, ylist = calclists(phasesubband)
 
@@ -143,15 +106,9 @@ for fname in os.listdir(startdir):
     for ind in range(len(xlist)):
         point = xlist[ind]
 
-        bottom = ind-x_rel
-        top = ind+x_rel
 
-        if bottom < 0:
-            bottom = 0
-        while top >= len(xlist):
-            top = len(xlist) - 1
-
-        tlist = xlist[bottom:top]
+        tlist = np.roll(xlist, (-ind)+x_rel)
+        tlist = tlist[:x_rel*2]
 
         xstd = np.std(tlist)
         xmean = np.median(tlist) #X-MEAN IS ACTUALLY THE MEDIAN
@@ -192,7 +149,7 @@ for fname in os.listdir(startdir):
 
     status = ''
     
-    if (sigpoints >= thresh and xmin > obj_min) or xpeak >= override:
+    if (sigpoints >= thresh and xpeak > obj_min) or xpeak >= override:
         if subbandsetting == 'reg':
             dm = dmfind(img)
             if dm < 2:
@@ -226,6 +183,5 @@ for fname in os.listdir(startdir):
 
     plt.show()
 
-        
 
     

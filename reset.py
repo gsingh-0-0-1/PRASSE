@@ -18,7 +18,7 @@ import pygame
 import pytesseract
 import sys
 
-dirs = ['pulsar/', 'not_pulsar/']
+dirs = ['pulsar/', 'not_pulsar/', 'rfi/']
 
 for d in dirs:
     items = os.listdir(d)
