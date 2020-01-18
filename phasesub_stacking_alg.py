@@ -75,7 +75,8 @@ for fname in os.listdir(startdir):
     #Open image, basic initial processing
     
     try:
-        img = cv2.imread(startdir+fname)
+        img = Image.open(startdir+fname)
+        img = np.array(img)
     except OSError:
         continue
 
@@ -182,6 +183,3 @@ for fname in os.listdir(startdir):
         ##plt.imshow(phasesubband)
 
     plt.show()
-
-
-    
