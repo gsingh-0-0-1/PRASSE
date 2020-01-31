@@ -41,8 +41,8 @@ resp = user.post(url, data=payload)
 resp1 = user.get('http://psrsearch.wvu.edu/psc/skymap.php')
 resp1 = resp1.text
 
-resp1 = resp1.replace("preview.php?datasetID", '', arglist[1])
-resp1 = resp1.replace(">View", '', arglist[1])
+resp1 = resp1.replace("preview.php?datasetID", '', arglist[1]-1)
+resp1 = resp1.replace(">View", '', arglist[1]-1)
 
 for i in range(arglist[2]):
     dataset = resp1[resp1.index("preview.php?datasetID"):resp1.index('''>View''')]

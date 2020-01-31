@@ -22,6 +22,9 @@ if gui == 'gui':
     fig = plt.figure()
     ax = fig.add_subplot(111)
 
+print("#####Quick Program Statistics#####")
+print("#####Noise Filter Percentage######")
+
 for i in range(loop):
     pulsars = 0
     for i in os.listdir('pulsar/'):
@@ -43,10 +46,16 @@ for i in range(loop):
 
     total = pulsars+non+rfi
 
-    print("Pulsars: "+str(pulsars))
-    print("Not pulsars: "+str(non))
-    print("Total: "+str(total))
-    print("Filter percentage: "+str(100*pulsars/total))
+    val = str(round(100*pulsars/total, 5))
+
+    output = ''
+    output = output + "Pulsars: "+str(pulsars)+'\n'
+    output = output + "Not pulsars: "+str(non)+'\n'
+    output = output + "Total: "+str(total)+'\n'
+    output = output + "Filter percentage: "+val+'\n'
+
+    sys.stdout.write('\r'+val)
+    sys.stdout.flush()
 
     val = 100*pulsars/total
     ls += [val]
@@ -58,5 +67,7 @@ for i in range(loop):
     ##    ax.axhline(y=val-bound)
         fig.canvas.draw()
         fig.canvas.flush_events()
-    time.sleep(1)
 
+    time.sleep(0.2)
+
+print()
