@@ -65,44 +65,30 @@ def calcvals(xlist):
     xmin = np.amin(xlist)
 
     return xstd, xmean, xpeak, xmin
-    
 
-for fname in os.listdir(startdir):
-    if fname[0] == '.' or fname == 'temp.png' or 'single' in fname:
-        continue
-    print(fname)
-
+def get_img_phasesub(fname):
     #Open image, basic initial processing
     
     try:
         img = Image.open(startdir+fname)
         img = np.array(img)
     except OSError:
-        continue
+        return
 
     #gbncc demos setting below
     if subbandsetting == 'demo':
         origphasesubband = img[200:380, 350:500]
     if subbandsetting == 'reg':
-        origphasesubband = img[170:355, 320:470] #switch 355 to 370
+        origphasesubband = img[170:355, 320:470]
     if subbandsetting == 'none':
         origphasesubband = img
     if subbandsetting == 'inp':
         origphasesubband = img[y1:y2, x1:x2]
 
-    phasesubband = origphasesubband
+    return img, origphasesubband
 
-    #phasesubband = cv2.GaussianBlur(origphasesubband, (5,5), 1)
-
-
-
-    xlist, ylist = calclists(phasesubband)
-
-    xstd, xmean, xpeak, xmin = calcvals(xlist)
-
-    sigpoints = 0 #need *thresh* points above mult * std to call it a pulsar, accounting for regularities between phases
-    
-    #add to sig points based on x points peaks
+def x_analysis(sigpoints, xlist):
+    sigpoints = sigpoints
     x_measures = []
     for ind in range(len(xlist)):
         point = xlist[ind]
@@ -119,35 +105,9 @@ for fname in os.listdir(startdir):
         if point > xmean + xmult*xstd:
             sigpoints += 1
 
-    #start y list analysis
-    y_measures = []
-    persist = 1 #to stop a thick line from counting as too many points
-    current_p = 0
-    for ind in range(len(ylist)):
-        if current_p > 0:
-            current_p -= 1
-            continue #make use of the threshold here
-        point = ylist[ind]
-        
-        bottom = ind-y_rel
-        top = ind+y_rel
-        
-        while bottom < 0:
-            bottom += 1
-        while top > len(ylist): #not subracting 1 here since indexing excludes the finish
-            top -= 1
+    return x_measures, sigpoints
 
-        tlist = ylist[bottom:top]
-        
-        ystd = np.std(tlist)
-        ymean = np.mean(tlist)
-        
-        y_measures += [ymean+ystd*ymult]
-        
-        if point > ymean + ymult*ystd:
-            sigpoints -= 1
-            current_p = persist
-
+def get_status(sigpoints, thresh, obj_min, override, xpeak, img):
     status = ''
     
     if (sigpoints >= thresh and xpeak > obj_min) or xpeak >= override:
@@ -161,6 +121,26 @@ for fname in os.listdir(startdir):
             status = 'pulsar'
     else:
         status = 'not_pulsar'
+
+    return status
+
+        
+def main(fname):
+    if fname[0] == '.' or fname == 'temp.png' or 'single' in fname:
+        return
+    print(fname)
+    
+    img, phasesubband = get_img_phasesub(fname)
+
+    xlist, ylist = calclists(phasesubband)
+
+    xstd, xmean, xpeak, xmin = calcvals(xlist)
+
+    sigpoints = 0
+    
+    x_measures, sigpoints = x_analysis(sigpoints, xlist)
+
+    status = get_status(sigpoints, thresh, obj_min, override, xpeak, img)
 
     shutil.move(startdir+fname, status+'/'+fname)
 
@@ -183,3 +163,7 @@ for fname in os.listdir(startdir):
         ##plt.imshow(phasesubband)
 
     plt.show()
+
+
+for fname in os.listdir(startdir):
+    main(fname)
