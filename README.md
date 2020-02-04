@@ -18,7 +18,7 @@ Keep these in mind when looking at runtime statistics.
 
 ### 1. Installing Anaconda
 
-To start working on the code it's required that you have a python environment. If you already have a Python environment set up, skip to step 4.
+To start working on the code it's required that you have a python environment. If you already have a Python environment set up, skip this step and go to step 2.
 
 To install anaconda visit https://www.anaconda.com/distribution/#download-section and download the package installer for your operating system
  
