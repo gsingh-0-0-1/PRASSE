@@ -14,7 +14,7 @@ Keep these in mind when looking at runtime statistics.
 
 
 
-# Instructions (Steps 1-3 need only be completed once)
+# Instructions (Steps 1-2 need only be completed once)
 
 ### 1. Installing Anaconda
 
