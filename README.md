@@ -42,7 +42,7 @@ To install anaconda visit https://www.anaconda.com/distribution/#download-sectio
 
 
 ### 3. Getting the Code to Run
-#### Install Tesseract-OCR
+#### Installing Tesseract-OCR (Needs to be done only once)
 - For the program to check if a potential pulsar plot is RFI, the program requires the Tesseract-OCR engine to read the DM value. 
 - To install Tesseract-OCR on a mac you must either have Homebrew or MacPorts installed. To install Homebrew you can either visit https://brew.sh/ and follow the instructions, or you just run the command ```/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"``` in the terminal. To install MacPorts, you have to follow the instructions at https://www.macports.org/install.php. Since Homebrew is easier to install and does not require sudo privileges it is recommended to install it instead of MacPorts.
 - If you installed Homebrew, you can install the Tesseract engine by running the command ```brew install tesseract```.
