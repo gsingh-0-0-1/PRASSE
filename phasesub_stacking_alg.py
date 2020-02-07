@@ -19,7 +19,7 @@ import pytesseract
 import sys
 from dmreader import dmfind
 
-startdir='images/'
+startdir='knownpulsars/'
 
 args = sys.argv
 
@@ -146,8 +146,8 @@ def main(fname):
 
     if gui == 'gui':
         plt.subplot(2, 2, 1)
-        plt.plot(y_measures, 'red')
-        plt.plot(ylist, 'blue')
+        #plt.plot(y_measures, 'red')
+        #plt.plot(ylist, 'blue')
 
         plt.subplot(2, 2, 2)
         plt.plot(xlist, 'blue')
