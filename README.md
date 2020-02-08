@@ -68,8 +68,8 @@ To install anaconda visit https://www.anaconda.com/distribution/#download-sectio
   - ```crop option:``` This option controls how the program crops out the phase-subband graphs. Use “reg” for data from the GBT, and “inp” for other data. If you use this option, make sure to first check the coordinates in the image of the phase-subband graphs - do this after resizing the image to 780 by 582. The program will automatically resize the images to this size, but you’ll have to tell the program where to crop out the image.
   - ```spike_thresh:``` This option controls the threshold for finding peaks in the data. A higher number means that fewer points will be flagged as a spike or a pulse.
   - ```spike_rel_median_dist:``` This controls how spike_thresh is applied. A larger number tends to stabilize this set of values to a straight line.
-  - ```noise_thresh:``` This is the threshold for something to be considered a horizontal line, and flagged as a noise point. A higher number means that fewer points will be flagged as noise.
-  - ```noise_rel_mean_distance:``` This serves the same purpose for noise_thresh as the spike_rel_mean_dist serves for spike_thresh
+  - Now defunct - will be removed soon: ```noise_thresh:``` This is the threshold for something to be considered a horizontal line, and flagged as a noise point. A higher number means that fewer points will be flagged as noise.
+  - Now defunct - will be removed soon: ```noise_rel_mean_distance:``` This serves the same purpose for noise_thresh as the spike_rel_mean_dist serves for spike_thresh
   - ```override:``` This number is sort of a “veto” - if there are any points detected above this threshold, the plot will instantly be dumped into the pulsar folder. It’s not reliant on any values obtained from the image, which makes it a useful tool.
   - ```obj_min:``` This works as the opposite of the override parameter.
   - For more detailed descriptions, please contact me.
