@@ -14,7 +14,6 @@ import time
 import PIL
 from PIL import Image
 import shutil
-import pygame
 import pytesseract
 import sys
 from dmreader import dmfind
@@ -150,14 +149,19 @@ def main(fname):
         #plt.plot(ylist, 'blue')
 
         plt.subplot(2, 2, 2)
+        plt.xlabel('Pixels (Phase x 75)')
+        plt.ylabel('Intensity')
         plt.plot(xlist, 'blue')
         plt.plot(x_measures, 'red')
-        plt.axhline(y=override, color='red')
-        plt.axhline(y=obj_min, color='red')
+        plt.axhline(y=override, color='orange')
+        plt.axhline(y=obj_min, color='orange')
         
         plt.subplot(2, 2, 3)
         plt.axhline(y=0)
-        plt.axhline(y=len(xlist)*765)
+        print(len(phasesubband)*765)
+        plt.axhline(y=len(phasesubband)*765)
+        plt.xlabel('Pixels (Phase x 75)')
+        plt.ylabel('Intensity')
         plt.plot(xlist, 'blue')
 
         ##plt.imshow(phasesubband)
