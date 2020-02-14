@@ -24,7 +24,7 @@ args = sys.argv
 
 subbandsetting = args[1]
 if args[2] == 'default': #make the default settings internal, easier for UI
-    xmult = 3
+    xmult = 2.75
     x_rel = 10
     ymult = 2.5
     y_rel = 35
@@ -82,7 +82,17 @@ def get_img_phasesub(fname):
     if subbandsetting == 'none':
         origphasesubband = img
     if subbandsetting == 'inp':
+        x1 = int(input("Enter first x-coordinate: "))
+        x2 = int(input("Enter second x-coordinate: "))
+        y1 = int(input("Enter first y-coordinate: "))
+        y2 = int(input("Enter second y-coordinate: "))
         origphasesubband = img[y1:y2, x1:x2]
+    if subbandsetting == 'skynet':
+        img = Image.open(startdir+fname)
+        img = img.resize([725, 540])
+        cv2.imwrite('new.png', np.array(img))
+        img = np.array(img)
+        origphasesubband = img[170:355, 320:470]
 
     return img, origphasesubband
 
@@ -145,8 +155,7 @@ def main(fname):
 
     if gui == 'gui':
         plt.subplot(2, 2, 1)
-        #plt.plot(y_measures, 'red')
-        #plt.plot(ylist, 'blue')
+        plt.imshow(phasesubband)
 
         plt.subplot(2, 2, 2)
         plt.xlabel('Pixels (Phase x 75)')

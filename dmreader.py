@@ -15,6 +15,8 @@ import sys
 
 def dmfind(img):
     dm = img[50:63, 386:620]
+    plt.imshow(dm)
+    plt.show()
     dm = pytesseract.image_to_string(dm)
     newstr = ''
 
@@ -31,4 +33,5 @@ def dmfind(img):
         newstr = '100'
     
     newstr = float(newstr)
+    
     return newstr
