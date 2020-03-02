@@ -22,23 +22,35 @@ startdir='images/'
 
 args = sys.argv
 
-subbandsetting = args[1]
-if args[2] == 'default': #make the default settings internal, easier for UI
-    xmult = 2.75
-    x_rel = 10
-    ymult = 2.5
-    y_rel = 35
-    override = 50000
-    obj_min = 10000
-    gui = args[3]
-else:
-    xmult = float(args[2])
-    x_rel = int(args[3])
-    ymult = float(args[4])
-    y_rel = int(args[5])
-    override = float(args[6])
-    obj_min = float(args[7])
-    gui = args[8]
+#start by initializing defaults, change later if needed
+subbandsetting = 'reg'
+xmult = 2.75
+x_rel = 10
+ymult = 2.5
+y_rel = 35
+override = 50000
+obj_min = 10000
+gui = 'nogui'
+
+if len(args) > 1:
+    print(args)
+    subbandsetting = args[1]
+    if args[2] == 'default': #make the default settings internal, easier for UI
+        xmult = 2.75
+        x_rel = 10
+        ymult = 2.5
+        y_rel = 35
+        override = 50000
+        obj_min = 10000
+        gui = args[3]
+    else:
+        xmult = float(args[2])
+        x_rel = int(args[3])
+        ymult = float(args[4])
+        y_rel = int(args[5])
+        override = float(args[6])
+        obj_min = float(args[7])
+        gui = args[8]
 thresh = 1
 
 if subbandsetting == 'inp':
@@ -177,9 +189,6 @@ def main(fname, startdir):
 
     return status
 
-pulsar = 0
-not_pulsar = 0
-rfi = 0
 
 for fname in os.listdir(startdir):
     result = main(fname, startdir)
@@ -187,6 +196,3 @@ for fname in os.listdir(startdir):
         pass
     else:
         shutil.move(startdir+fname, result+'/'+fname)
-        vars()[result] += 1
-
-print(pulsar, not_pulsar, rfi)
