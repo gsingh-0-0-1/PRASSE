@@ -22,7 +22,11 @@ startdir='images/'
 
 args = sys.argv
 
-#start by initializing defaults, change later if needed
+
+#start by initializing defaults, change later if args list is detected
+#NOTE: THIS IS FOR DEVELOPMENT PURPOSES ONLY. Please do not use/abuse this option,
+#as it is designed to work specifically with testing scripts. Please follow
+#all instructions in the README file.
 subbandsetting = 'reg'
 xmult = 2.75
 x_rel = 10
