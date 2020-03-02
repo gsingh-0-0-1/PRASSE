@@ -65,7 +65,7 @@ def calcvals(xlist):
 
     return xstd, xmean, xpeak, xmin
 
-def get_img_phasesub(fname):
+def get_img_phasesub(fname, startdir):
     #Open image, basic initial processing
     
     try:
@@ -134,12 +134,12 @@ def get_status(sigpoints, thresh, obj_min, override, xpeak, img):
     return status
 
         
-def main(fname):
+def main(fname, startdir):
     if fname[0] == '.' or fname == 'temp.png' or 'single' in fname:
         return
     print(fname)
     
-    img, phasesubband = get_img_phasesub(fname)
+    img, phasesubband = get_img_phasesub(fname, startdir)
 
     xlist, ylist = calclists(phasesubband)
 
@@ -150,8 +150,6 @@ def main(fname):
     x_measures, sigpoints = x_analysis(sigpoints, xlist)
 
     status = get_status(sigpoints, thresh, obj_min, override, xpeak, img)
-
-    shutil.move(startdir+fname, status+'/'+fname)
 
     if gui == 'gui':
         plt.subplot(2, 2, 1)
@@ -177,6 +175,18 @@ def main(fname):
 
     plt.show()
 
+    return status
+
+pulsar = 0
+not_pulsar = 0
+rfi = 0
 
 for fname in os.listdir(startdir):
-    main(fname)
+    result = main(fname, startdir)
+    if result == None: #check for files that are skipped over (see conditions at the beginning of main()
+        pass
+    else:
+        shutil.move(startdir+fname, result+'/'+fname)
+        vars()[result] += 1
+
+print(pulsar, not_pulsar, rfi)
