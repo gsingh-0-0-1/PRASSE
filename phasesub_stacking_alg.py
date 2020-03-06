@@ -30,8 +30,6 @@ args = sys.argv
 subbandsetting = 'reg'
 xmult = 2.75
 x_rel = 10
-ymult = 2.5
-y_rel = 35
 override = 50000
 obj_min = 10000
 gui = 'nogui'
@@ -42,19 +40,15 @@ if len(args) > 1:
     if args[2] == 'default': #make the default settings internal, easier for UI
         xmult = 2.75
         x_rel = 10
-        ymult = 2.5
-        y_rel = 35
         override = 50000
         obj_min = 10000
         gui = args[3]
     else:
         xmult = float(args[2])
         x_rel = int(args[3])
-        ymult = float(args[4])
-        y_rel = int(args[5])
-        override = float(args[6])
-        obj_min = float(args[7])
-        gui = args[8]
+        override = float(args[4])
+        obj_min = float(args[5])
+        gui = args[6]
 thresh = 1
 
 if subbandsetting == 'inp':
