@@ -12,7 +12,9 @@ Memory: 8 GB 1867 MHz DDR3
 
 Keep these in mind when looking at runtime statistics.
 
+We have written and uploaded to the arXiv a paper regarding this program - the link is here: https://arxiv.org/abs/2004.07865. We have submitted to a journal and will post a link update once it has been published and released.
 
+Some of our testing data is located here - https://tinyurl.com/pulsartestdatasets.
 
 # Instructions (Steps 1-2 need only be completed once)
 
@@ -71,9 +73,6 @@ To install anaconda visit https://www.anaconda.com/distribution/#download-sectio
   - ```override:``` This number is sort of a “veto” - if there are any points detected above this threshold, the plot will instantly be dumped into the pulsar folder. It’s not reliant on any values obtained from the image, which makes it a useful tool.
   - ```obj_min:``` This works as the opposite of the override parameter.
   - For more detailed descriptions, please contact me.
-
-
-
 
 And remember, this is still in production, so there may be glitches and misclassifications! Contact me if you have a suggestion
 I didn’t include here or a bug I missed.
