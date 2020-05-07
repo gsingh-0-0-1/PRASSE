@@ -16,6 +16,8 @@ We have written and uploaded to the arXiv a paper regarding this program - the l
 
 Some of our testing data is located here - https://tinyurl.com/pulsartestdatasets.
 
+A great video - recorded by the Pulsar Search Collaboratory - that explains FFT plots can be found here: http://pulsarsearchcollaboratory.com/week-3-prepfold-plots-and-the-atnf-catalog/.
+
 # Instructions (Steps 1-2 need only be completed once)
 
 ### 1. Installing Anaconda
