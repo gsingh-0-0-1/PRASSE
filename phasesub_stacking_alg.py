@@ -1,4 +1,4 @@
-#* Copyright (C) Gurmehar Singh - All Rights Reserved
+#* Copyright (C) Gurmehar Singh 2019 - All Rights Reserved
 #* Unauthorized copying or distribution of this file, via any medium is strictly prohibited
 #* Proprietary and confidential
 #* Written by Gurmehar Singh <gurmehar@gmail.com>, October 2019
@@ -28,8 +28,8 @@ args = sys.argv
 #as it is designed to work specifically with testing scripts. Please follow
 #all instructions in the README file.
 subbandsetting = 'reg'
-xmult = 2.75
-x_rel = 10
+xmult = 2.7
+x_rel = 30
 override = 50000
 obj_min = 10000
 gui = 'nogui'
@@ -38,8 +38,8 @@ if len(args) > 1:
     print(args)
     subbandsetting = args[1]
     if args[2] == 'default': #make the default settings internal, easier for UI
-        xmult = 2.75
-        x_rel = 10
+        xmult = 2.7
+        x_rel = 30
         override = 50000
         obj_min = 10000
         gui = args[3]
@@ -60,7 +60,14 @@ if subbandsetting == 'inp':
 ##function definitions
 
 def calclists(phasesubband):
-    phasesubband = np.sum(255-phasesubband, axis=2)
+    phasesubband = 255 - phasesubband
+    base = 1.04
+    skew = 120
+
+    #phasesubband = 255 / (1 + (base**((phasesubband*-1)+skew)))
+
+    
+    phasesubband = np.sum(phasesubband, axis=2)
 
     xlist = np.sum(phasesubband, axis=0)
     ylist = np.sum(phasesubband, axis=1)
@@ -81,8 +88,10 @@ def get_img_phasesub(fname, startdir):
     try:
         img = Image.open(startdir+fname)
         img = np.array(img)
+        if len(np.shape(img)) < 3:
+            return 'error', 'error'
     except OSError:
-        return
+        return 'error', 'error'
 
     #gbncc demos setting below
     if subbandsetting == 'demo':
@@ -150,6 +159,8 @@ def main(fname, startdir):
     print(fname)
     
     img, phasesubband = get_img_phasesub(fname, startdir)
+    if img == 'error' or phasesubband == 'error':
+        return None
 
     xlist, ylist = calclists(phasesubband)
 

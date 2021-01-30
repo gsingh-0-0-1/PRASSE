@@ -1,3 +1,10 @@
+#* Copyright (C) Gurmehar Singh 2019 - All Rights Reserved
+#* Unauthorized copying or distribution of this file, via any medium is strictly prohibited
+#* Proprietary and confidential
+#* Written by Gurmehar Singh <gurmehar@gmail.com>, October 2019
+#*/
+
+
 import numpy as np, random
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
